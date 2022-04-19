@@ -1,12 +1,9 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": {
-    "analytics": "69919aad-95b9-4097-a524-4f94af4236f1"
-  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "apsi-frontend": {
+    "apsi-work-tracking-frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -20,18 +17,16 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/apsi-frontend",
+            "outputPath": "dist/apsi-work-tracking-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/favicon.png",
+              "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -73,10 +68,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "apsi-frontend:build:production"
+              "browserTarget": "apsi-work-tracking-frontend:build:production"
             },
             "development": {
-              "browserTarget": "apsi-frontend:build:development"
+              "browserTarget": "apsi-work-tracking-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -84,7 +79,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "apsi-frontend:build"
+            "browserTarget": "apsi-work-tracking-frontend:build"
           }
         },
         "test": {
@@ -99,7 +94,6 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -108,5 +102,5 @@
       }
     }
   },
-  "defaultProject": "apsi-frontend"
+  "defaultProject": "apsi-work-tracking-frontend"
 }
