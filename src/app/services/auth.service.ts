@@ -1,12 +1,17 @@
 import { Observable, of, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Consts } from '../consts/consts';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private router: Router) {}
+
+  authenticated = false;
+
+  constructor(private router: Router, private http: HttpClient) {}
 
   setToken(token: string): void {
     localStorage.setItem('token', token);
@@ -26,10 +31,26 @@ export class AuthService {
   }
 
   login({ email, password }: any): Observable<any> {
-    if (email === 'admin' && password === 'admin') {
-      this.setToken('abcdefghijklmnopqrstuvwxyz');
-      return of({ name: 'Artur Babacki', email: 'admin@gmail.com' });
+    const headers = new HttpHeaders({
+      authorization : 'Basic ' + btoa(email + ':' + password)
+    });
+    var response: any;
+
+    this.http.get(Consts.BACKEND_URL + 'user', {headers: headers}).subscribe((response : any) => {
+      if (response['name']) {
+          this.authenticated = true;
+          // get token
+          this.setToken('abcdefghijklmnopqrstuvwxyz');
+          response = response;
+      } else {
+          this.authenticated = false;
+      }
+    });
+
+    if (this.authenticated) {
+      return of({ name: response['name'], email: response['email'] });
+    } else {
+      return throwError(new Error('Failed to login'));
     }
-    return throwError(new Error('Failed to login'));
   }
 }
