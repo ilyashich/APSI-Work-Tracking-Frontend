@@ -37,12 +37,15 @@ export class AuthService {
     var response: any;
 
     this.http.get(Consts.BACKEND_URL + 'user', {headers: headers}).subscribe((response : any) => {
+      console.log(response)
       if (response['name']) {
+        console.log('this.authenticated = true')
           this.authenticated = true;
           // get token
           this.setToken('abcdefghijklmnopqrstuvwxyz');
           response = response;
       } else {
+        console.log('this.authenticated = false')
           this.authenticated = false;
       }
     });
