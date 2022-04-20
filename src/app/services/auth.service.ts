@@ -32,7 +32,7 @@ export class AuthService {
 
   login({ email, password }: any): Observable<any> {
     const headers = new HttpHeaders({
-      authorization : 'Basic ' + btoa(email + ':' + password)
+      Authorization : 'Basic ' + btoa(email + ':' + password)
     });
     var response: any;
 
@@ -48,7 +48,7 @@ export class AuthService {
     });
 
     if (this.authenticated) {
-      return of({ name: response['name'], email: response['email'] });
+      return of({ name: response['name'], email: response['name'] });
     } else {
       return throwError(new Error('Failed to login'));
     }
