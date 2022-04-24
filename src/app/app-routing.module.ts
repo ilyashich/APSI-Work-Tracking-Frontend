@@ -1,21 +1,29 @@
+import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import {LoginComponent} from "./components/login/login.component";
-import {ForgotPasswordComponent} from "./components/forgot-password/forgot-password.component";
-import {PageNotFoundComponent} from "./components/page-not-found/page-not-found.component";
-import {MainPageComponent} from "./components/main-page/main-page.component";
-import {AuthGuard} from "./guards/auth.guard";
+import { AuthGuard } from './@services/auth-guard.service';
 
 const routes: Routes = [
-  {path: 'login', component: LoginComponent},
-  {path: 'forgot-password', component: ForgotPasswordComponent},
-  {path: '', redirectTo: '/login', pathMatch: 'full'},
-  {path: 'main-page', canActivate:[AuthGuard] , component: MainPageComponent},
-  {path: '**', component: PageNotFoundComponent},
+  {
+    path: 'pages',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/pages.module')
+      .then(m => m.PagesModule),
+  },
+  {
+    path: 'auth',
+    loadChildren: './auth/auth.module#NgxAuthModule',
+  },
+  { path: '', redirectTo: 'pages', pathMatch: 'full' },
+  { path: '**', redirectTo: 'pages' },
 ];
 
+const config: ExtraOptions = {
+  useHash: false,
+};
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes, config)],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

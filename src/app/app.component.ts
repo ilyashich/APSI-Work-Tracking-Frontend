@@ -1,22 +1,21 @@
-import { Component } from '@angular/core';
-// import { AppService } from './app.service';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+/**
+ * @license
+ * Copyright Akveo. All Rights Reserved.
+ * Licensed under the MIT License. See License.txt in the project root for license information.
+ */
+import { Component, OnInit } from '@angular/core';
+import { AnalyticsService } from './@core/utils/analytics.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'ngx-app',
+  template: '<router-outlet></router-outlet>',
 })
-export class AppComponent {
-  constructor(private http: HttpClient, private router: Router) {
-    // this.app.authenticate(undefined, undefined);
-  }
-  // logout() {
-  //   this.http.post('logout', {}).finally(() => {
-  //     this.app.authenticated = false;
-  //     this.router.navigateByUrl('/login');
-  //   }).subscribe();
-  // }
+export class AppComponent implements OnInit {
 
+  constructor(private analytics: AnalyticsService) {
+  }
+
+  ngOnInit() {
+    this.analytics.trackPageViews();
+  }
 }
