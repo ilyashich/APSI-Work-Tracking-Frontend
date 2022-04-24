@@ -10,7 +10,12 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'forgot-password', component: ForgotPasswordComponent},
   {path: '', redirectTo: '/login', pathMatch: 'full'},
-  {path: 'main-page', canActivate:[AuthGuard] , component: MainPageComponent},
+  {
+    path: 'pages',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/pages.module')
+      .then(m => m.PagesModule),
+  },
   {path: '**', component: PageNotFoundComponent},
 ];
 
