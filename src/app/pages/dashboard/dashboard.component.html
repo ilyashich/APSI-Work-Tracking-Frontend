@@ -1,63 +1,24 @@
-<div class="row">
-  <div class="col-12">
-    <nb-card [nbSpinner]="!orders || orders.length == 0" nbSpinnerSize="medium" nbSpinnerStatus="primary" size="giant">
-      <nb-card-header>Dokumenty</nb-card-header>
-      <nb-card-body>
-        <div class="d-flex align-items-center justify-content-between document-row">
-          <span class="text-hint">Dealer</span>
-          <span class="text-hint">Typ</span>
-          <span class="text-hint">Numer</span>
-          <span class="text-hint">Data</span>
-          <span class="text-hint">E-mail</span>
-          <span class="text-hint">Telefon</span>
-          <span class="text-hint">Wartosc brutto</span>
-          <span class="text-hint"></span>
-        </div>
-        <mat-accordion>
-          <mat-expansion-panel *ngFor="let document of orders" hideToggle>
-            <mat-expansion-panel-header>
-              <div class="d-flex align-items-center justify-content-between full-width document-row flex-nowrap">
-                <span>{{ document.dealerAccessUrl }}</span>
-                <span>{{ document.documentType }}</span>
-                <span>{{ document.orderNumber }}</span>
-                <span>{{ document.addDateTime | date:'dd/MM/yyyy HH:mm' }}</span>
-                <span>{{ document.clientName }}</span>
-                <span>{{ document.phone }}</span>
-                <span>{{ document.totalGrossWithProfitAfterDiscountCostLabel }}</span>
-                <span>
-                  <nb-icon (click)="$event.stopPropagation(); downloadDocument(document.uuid, document.dealerAccessUrl)"
-                           nbTooltip="Download"
-                           [icon]="'save'"
-                           pack="eva"></nb-icon>
-                  <nb-icon (click)="$event.stopPropagation(); translateDocument(document.uuid, document.dealerAccessUrl)"
-                           nbTooltip="Download translated"
-                           [icon]="'cloud-download'"
-                           pack="eva"
-                           class="ml-3"></nb-icon>
-                </span>
-              </div>
-            </mat-expansion-panel-header>
-              <ul>
-                <li>Numer dokumentu: {{ document. orderNumber }}</li>
-                <li>Typ dokumentu: {{ document.documentType }}</li>
-                <li>Data dodania: {{ document.addDateTime | date:'dd/MM/yyyy HH:mm' }}</li>
-                <li>Dodatkowe info: {{ document.commnets }}</li>
-                <li>Język: {{ document.language }}</li>
-                <li>Dealer: {{ document.dealerAccessUrl }}</li>
-                <li>E-mail: {{ document.email }}</li>
-                <li>Imię i nazwisko: {{ document.firstName }} {{ document.lastName }}</li>
-                <li>Telefon: {{ document.phone }}</li>
-                <li>Dostawa w km: {{ document.deliveryDistance }}</li>
-                <li>Adres: {{ document.address }} {{ document.aptNumber }} {{ document.city }} {{ document.postCode }} {{ document.country }}</li>
-              </ul>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <mat-paginator [length]="100"
-                       [pageSize]="10"
-                       [pageSizeOptions]="[5, 10, 25, 100]"
-                       (page)="pageChangeEvent($event)" >
-        </mat-paginator>
-      </nb-card-body>
-    </nb-card>
+<div class="e-card" id="basic">
+  <div class="card-content">
+      <div class="e-card-header">
+          <div class="e-card-header-caption">
+              <div class="e-card-title">Dokumenty</div>
+          </div>
+      </div>
+      <div class="e-card-content" id="content">
+          <ejs-grid #grid [dataSource]='orders' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true" [filterSettings]='filterOptions' 
+          [pageSettings]='pageSettings' (commandClick)='commandClick($event)' (actionComplete)='actionComplete($event)'>
+              <e-columns>
+                  <e-column field='dealerAccessUrl' [filter] = 'filter' headerText='Dealer' textAlign='Left' width=60></e-column>
+                  <e-column field='documentType' [filter] = 'filter' headerText='Typ' textAlign='Left' width=40></e-column>
+                  <e-column field='orderNumber' headerText='Numer' textAlign='Left' width=50></e-column>
+                  <e-column field='addDateTime' [valueAccessor]='valueAccess' headerText='Data' textAlign='Left' width=80></e-column>
+                  <e-column field='email' headerText='E-mail' textAlign='Left' width=80></e-column>
+                  <e-column field='phone' headerText='Telefon' textAlign='Left' width=80></e-column>
+                  <e-column field='totalGrossWithProfitAfterDiscountCostLabel' headerText='Wartość brutto' textAlign='Left' width=100></e-column>
+                  <e-column headerText='Commands' width=80 [commands]='commands'></e-column>
+              </e-columns>
+          </ejs-grid>
+      </div>
   </div>
 </div>
