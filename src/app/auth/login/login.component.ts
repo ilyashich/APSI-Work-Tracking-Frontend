@@ -26,14 +26,10 @@ export class LoginComponent implements OnInit {
       (e: Event) => {
         e.preventDefault();
         if (this.requestForm.valid) {
-          // ----------
-          this.auth.login(this.requestForm.value).subscribe(
-            (result) => {
-              console.log('login result: ' + result);
-              this.router.navigate(['/pages']);
-            },
-            (err: Error) => {
-              alert(err.message);
+          const fetchTokenWithTimeout = this.promiseTimeout(10000, this.auth.login(this.requestForm.value));
+          fetchTokenWithTimeout.then(
+            result => {
+              this.router.navigate(['pages/dashboard']);
             }
           );
         }

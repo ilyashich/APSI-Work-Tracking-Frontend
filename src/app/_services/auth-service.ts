@@ -30,28 +30,26 @@ export class AuthService {
     this.router.navigate(['login']);
   }
 
-  login({ login, password }: any): Observable<any> {
+  login({ login, password }: any): Promise<any> {
     const headers = new HttpHeaders({
       Authorization : 'Basic ' + btoa(login + ':' + password)
     });
 
-    this.http.get(Consts.BACKEND_URL + 'user', {headers: headers}).subscribe((response : any) => {
-      console.log('login response: ' + response)
-      if (response['name']) {
-        console.log('this.authenticated = true')
-          this.authenticated = true;
-          // get token
-          this.setToken('abcdefghijklmnopqrstuvwxyz');
-      } else {
-          console.log('this.authenticated = false')
-          this.authenticated = false;
-      }
+    return new Promise<string>((resolve, reject) => {
+        this.http.get(Consts.BACKEND_URL + 'user', {headers: headers}).subscribe((response : any) => {
+            console.log('login response: ' + response)
+            if (response['name']) {
+              console.log('this.authenticated = true')
+                this.authenticated = true;
+                // get token
+                this.setToken('abcdefghijklmnopqrstuvwxyz');
+                resolve(response['name']);
+            } else {
+                console.log('this.authenticated = false')
+                this.authenticated = false;
+                reject(new Error('Failed to login'));
+            }
+          });
     });
-
-    if (this.authenticated) {
-      return of({ name: 'test'});
-    } else {
-      return throwError(new Error('Failed to login'));
-    }
   }
 }
