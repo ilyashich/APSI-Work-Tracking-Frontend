@@ -42,13 +42,16 @@ export class AuthService {
           this.authenticated = true;
           // get token
           this.setToken('abcdefghijklmnopqrstuvwxyz');
-          return of({ name: response['name'], email: response['name'] });
       } else {
           console.log('this.authenticated = false')
           this.authenticated = false;
       }
     });
 
-    return throwError(new Error('Failed to login'));
+    if (this.authenticated) {
+      return of({ name: 'test'});
+    } else {
+      return throwError(new Error('Failed to login'));
+    }
   }
 }
