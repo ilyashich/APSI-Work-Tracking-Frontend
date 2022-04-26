@@ -6,6 +6,7 @@ import { of, Observable } from 'rxjs';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { CommonService } from './common.service';
 import { ContextProvider } from './context.provider';
+import { AuthService } from './auth-service';
 
 @Injectable()
 export class RestApiService {
@@ -19,7 +20,8 @@ export class RestApiService {
     private oauthService: OAuthService,
     private http: HttpClient,
     private commonService: CommonService,
-    private contextProvider: ContextProvider) 
+    private contextProvider: ContextProvider,
+    private authService: AuthService) 
     { }
 
   get_users() {
@@ -27,7 +29,11 @@ export class RestApiService {
   }
 
   private doUnauthorized_GET(url: string): Observable<any> {
-    return this.http.get<any>(url).pipe(
+    const headers = new HttpHeaders({
+      Authorization : this.authService.getAuthHeader
+    });
+    
+    return this.http.get<any>(url, {headers: headers}).pipe(
         timeout(this.requestTimeout),
         // ================
         flatMap(response => of({ item: response, error: null })),

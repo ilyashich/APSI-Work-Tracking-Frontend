@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Consts } from '../_consts/consts';
+import { User } from '../_models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +11,11 @@ import { Consts } from '../_consts/consts';
 export class AuthService {
 
   authenticated = false;
+  authHeader: string;
 
   constructor(private router: Router, private http: HttpClient) {}
+
+  get getAuthHeader() {return this.authHeader;}
 
   setToken(token: string): void {
     localStorage.setItem('token', token);
@@ -41,6 +45,7 @@ export class AuthService {
             if (response['name']) {
               console.log('this.authenticated = true')
                 this.authenticated = true;
+                this.authHeader = 'Basic ' + btoa(login + ':' + password);
                 // get token
                 this.setToken('abcdefghijklmnopqrstuvwxyz');
                 resolve(response['name']);
