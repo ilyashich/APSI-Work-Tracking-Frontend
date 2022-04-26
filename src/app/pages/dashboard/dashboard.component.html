@@ -6,16 +6,14 @@
           </div>
       </div>
       <div class="e-card-content" id="content">
-          <ejs-grid #grid [dataSource]='orders' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true" [filterSettings]='filterOptions' 
+          <ejs-grid #grid [dataSource]='users' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true" [filterSettings]='filterOptions' 
           [pageSettings]='pageSettings' (commandClick)='commandClick($event)' (actionComplete)='actionComplete($event)'>
               <e-columns>
-                  <e-column field='dealerAccessUrl' [filter] = 'filter' headerText='Dealer' textAlign='Left' width=60></e-column>
-                  <e-column field='documentType' [filter] = 'filter' headerText='Typ' textAlign='Left' width=40></e-column>
-                  <e-column field='orderNumber' headerText='Numer' textAlign='Left' width=50></e-column>
-                  <e-column field='addDateTime' [valueAccessor]='valueAccess' headerText='Data' textAlign='Left' width=80></e-column>
-                  <e-column field='email' headerText='E-mail' textAlign='Left' width=80></e-column>
-                  <e-column field='phone' headerText='Telefon' textAlign='Left' width=80></e-column>
-                  <e-column field='totalGrossWithProfitAfterDiscountCostLabel' headerText='Wartość brutto' textAlign='Left' width=100></e-column>
+                  <e-column field='id' headerText='ID' textAlign='Left' width=60></e-column>
+                  <e-column field='name' headerText='Imię' textAlign='Left' width=100></e-column>
+                  <e-column field='surname' headerText='Naziwsko' textAlign='Left' width=150></e-column>
+                  <e-column field='username' headerText='Login' textAlign='Left' width=100></e-column>
+                  <e-column field='role' headerText='Rola' textAlign='Left' width=80></e-column>
                   <e-column headerText='Commands' width=80 [commands]='commands'></e-column>
               </e-columns>
           </ejs-grid>

@@ -26,11 +26,6 @@ export class PagesComponent implements OnInit {
           name: 'Dashboard', 
           icon: 'house-fill',
           url: '/pages/dashboard'
-        },
-        {
-          name: 'Podsumowanie', 
-          icon: 'wallet-fill',
-          url: '/pages/summary'
         }
       ]
     }
