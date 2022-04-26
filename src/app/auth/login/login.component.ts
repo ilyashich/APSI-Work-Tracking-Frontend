@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
           // ----------
           this.auth.login(this.requestForm.value).subscribe(
             (result) => {
-              console.log(result);
+              console.log('login result: ' + result);
               this.router.navigate(['/pages']);
             },
             (err: Error) => {

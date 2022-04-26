@@ -34,26 +34,21 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization : 'Basic ' + btoa(login + ':' + password)
     });
-    var response: any;
 
     this.http.get(Consts.BACKEND_URL + 'user', {headers: headers}).subscribe((response : any) => {
-      console.log(response)
+      console.log('login response: ' + response)
       if (response['name']) {
         console.log('this.authenticated = true')
           this.authenticated = true;
           // get token
           this.setToken('abcdefghijklmnopqrstuvwxyz');
-          response = response;
+          return of({ name: response['name'], email: response['name'] });
       } else {
-        console.log('this.authenticated = false')
+          console.log('this.authenticated = false')
           this.authenticated = false;
       }
     });
 
-    if (this.authenticated) {
-      return of({ name: response['name'], email: response['name'] });
-    } else {
-      return throwError(new Error('Failed to login'));
-    }
+    return throwError(new Error('Failed to login'));
   }
 }
