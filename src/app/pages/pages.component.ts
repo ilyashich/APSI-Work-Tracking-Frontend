@@ -2,6 +2,7 @@ import { SidebarComponent } from '@syncfusion/ej2-angular-navigations';
 import { ButtonComponent } from "@syncfusion/ej2-angular-buttons";
 import { Component, ViewChild, ViewEncapsulation, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../_services/auth-service';
 
 @Component({
     selector: 'pages',
@@ -20,7 +21,7 @@ export class PagesComponent implements OnInit {
     public menuList: { [key: string]: string | object }[];
     private timeout: any;
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private authService: AuthService) {
       this.menuList = [
         {
           name: 'Dashboard', 
@@ -34,6 +35,10 @@ export class PagesComponent implements OnInit {
         this.togglebtn.content = 'Close';
         this.sidebar.show();
         document.getElementById("head").scrollIntoView();
+    }
+
+    logout() {
+      this.authService.logout();
     }
 
     pageChangeEvent(event) {

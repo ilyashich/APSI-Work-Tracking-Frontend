@@ -9,6 +9,10 @@
             <span class="list-item">{{data.name}}</span>
         </div>
       </ng-template>
+      <div class="list-container" (click)="logout()">
+        <i-bs name="bi bi-box-arrow-left"></i-bs>
+        <span class="list-item">Wyloguj się</span>
+      </div>
     </ejs-listview>
   </ejs-sidebar>
   <div id="maincontent" class="content">
