@@ -32,9 +32,9 @@ export class PagesComponent implements OnInit {
     }
   
     ngOnInit(): void {
-        this.togglebtn.content = 'Close';
-        this.sidebar.show();
-        document.getElementById("head").scrollIntoView();
+        //this.togglebtn.content = 'Close';
+        //this.sidebar.show();
+        //document.getElementById("head").scrollIntoView();
     }
 
     logout() {

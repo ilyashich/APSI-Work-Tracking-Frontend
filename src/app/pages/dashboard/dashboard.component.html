@@ -7,7 +7,7 @@
       </div>
       <div class="e-card-content" id="content">
           <ejs-grid #grid [dataSource]='users' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true" [filterSettings]='filterOptions' 
-          [pageSettings]='pageSettings' (commandClick)='commandClick($event)' (actionComplete)='actionComplete($event)'>
+          [pageSettings]='pageSettings' [editSettings]='editSettings' [toolbar]='toolbar' (commandClick)='commandClick($event)' (actionComplete)='actionComplete($event)'>
               <e-columns>
                   <e-column field='id' headerText='ID' textAlign='Left' width=60></e-column>
                   <e-column field='name' headerText='Imię' textAlign='Left' width=100></e-column>

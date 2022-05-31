@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActionEventArgs, CommandClickEventArgs, CommandModel, DetailRowService, EditSettingsModel, GridComponent, GridModel, PageEventArgs, PageSettingsModel, valueAccessor } from '@syncfusion/ej2-angular-grids';
+import { ActionEventArgs, CommandClickEventArgs, CommandModel, DetailRowService, EditSettingsModel, GridComponent, GridModel, PageEventArgs, PageSettingsModel, valueAccessor, ToolbarItems } from '@syncfusion/ej2-angular-grids';
 import { FilterSettingsModel, IFilter } from '@syncfusion/ej2-angular-grids';
 import { CommonService } from 'src/app/_services/common.service';
 import { ContextProvider } from 'src/app/_services/context.provider';
@@ -20,6 +20,8 @@ export class DashboardComponent implements OnInit {
   public filter: IFilter;
   public intl: Internationalization = new Internationalization(); 
   public dateFormatter: Function = this.intl.getDateFormat({ type: 'datetime', format: "dd/MM/yyyy HH:mm"}); 
+  public editSettings: EditSettingsModel;
+  public toolbar: ToolbarItems[];
   //------------------------------------------------
   users: User[] = [];
   apiContextsData: {};
@@ -38,6 +40,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
       this.pageSettings = {pageSizes: ['5', '10', '15', '20', '30', '50', '100', '500', '1000'], pageSize: 20 };
+      this.editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Dialog' };
+      this.toolbar = ['Add', 'Edit', 'Delete', 'Update', 'Cancel'];
       this.filterOptions = {
         type: 'Menu'
       };

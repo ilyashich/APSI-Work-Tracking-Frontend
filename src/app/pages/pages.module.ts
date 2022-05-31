@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommandColumnService, EditService, GridModule } from '@syncfusion/ej2-angular-grids';
-import { PageService, SortService, FilterService, GroupService } from '@syncfusion/ej2-angular-grids';
+import { PageService, SortService, FilterService, GroupService, ToolbarService } from '@syncfusion/ej2-angular-grids';
 import { ButtonModule, RadioButtonModule } from '@syncfusion/ej2-angular-buttons';
 import { SidebarModule } from '@syncfusion/ej2-angular-navigations';
 import { ListViewModule, VirtualizationService } from '@syncfusion/ej2-angular-lists';
@@ -42,7 +42,7 @@ const icons = {
     GroupService,
     VirtualizationService,
     CommonService, RestApiService, ContextProvider,
-    EditService, CommandColumnService
+    EditService, CommandColumnService, ToolbarService
   ]
 })
 export class PagesModule { }

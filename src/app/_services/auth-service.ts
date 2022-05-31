@@ -57,4 +57,25 @@ export class AuthService {
           });
     });
   }
+
+  /*login({ login, password }: any): Promise<any> {
+    const headers = new HttpHeaders({
+      Authorization : 'Basic ' + btoa(login + ':' + password)
+    });
+
+    return new Promise<string>((resolve, reject) => {
+      if (login == 'test' && password == 'test') {
+        console.log('this.authenticated = true')
+        this.authenticated = true;
+        this.authHeader = 'Basic ' + btoa(login + ':' + password);
+        // get token
+        this.setToken('abcdefghijklmnopqrstuvwxyz');
+        resolve('Test');
+      } else {
+        console.log('this.authenticated = false')
+        this.authenticated = false;
+        reject(new Error('Failed to login'));
+      }
+    });
+  }*/
 }

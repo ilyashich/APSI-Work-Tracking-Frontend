@@ -7,12 +7,13 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { CommonService } from './common.service';
 import { ContextProvider } from './context.provider';
 import { AuthService } from './auth-service';
+import { Consts } from '../_consts/consts';
 
 @Injectable()
 export class RestApiService {
 
   private requestTimeout: number = 20000;
-  private baseUrl: string = 'https://apsi-work-tracking-backend.azurewebsites.net/apsi/api';
+  private baseUrl: string = Consts.BACKEND_URL;
   private selectedContext: string;
 
   constructor(
