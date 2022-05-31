@@ -1,0 +1,19 @@
+<div class="e-card" id="basic">
+  <div class="card-content">
+      <div class="e-card-header">
+          <div class="e-card-header-caption">
+              <div class="e-card-title">Moje projekty</div>
+          </div>
+      </div>
+      <div class="e-card-content" id="content">
+          <ejs-grid #grid [dataSource]='projects' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true" [filterSettings]='filterOptions' 
+          [pageSettings]='pageSettings' [editSettings]='editSettings' [toolbar]='toolbar' (commandClick)='commandClick($event)' (actionComplete)='actionComplete($event)'>
+              <e-columns>
+                  <e-column field='projectId' headerText='ID' textAlign='Left' width=60></e-column>
+                  <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
+                  <e-column field='description' headerText='Opis' textAlign='Left' width=150></e-column>
+              </e-columns>
+          </ejs-grid>
+      </div>
+  </div>
+</div>

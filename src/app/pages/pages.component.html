@@ -1,9 +1,9 @@
 <div id="head" class="d-flex flex-row justify-content-between">
   <div>
-    <button ejs-button id="toggle" #togglebtn cssClass="e-flat" iconCss="e-icons burg-icon" isToggle="true" (click)="btnClick()" (touchstart)="touchstart()" (touchend)="touchend()" content="Close"></button>
+    <button ejs-button id="toggle" #togglebtn cssClass="e-flat" iconCss="e-icons burg-icon" isToggle="true" (click)="btnClick()" (touchstart)="touchstart()" (touchend)="touchend()" content="Zamknij"></button>
   </div>
   <div>
-    <button ejs-button id="toggle" cssClass="e-flat" (click)="btnClick()" content="Wyloguj się"></button>
+    <button ejs-button id="toggle" cssClass="e-flat" (click)="logout()" content="Wyloguj się"></button>
   </div>
 </div>
 <ejs-sidebar id="default-sidebar" #sidebar [type]='type' [enablePersistence]='enablePersistence' (created)="onCreated($event)" style="visibility: hidden" [target]='target'>
@@ -14,10 +14,6 @@
           <span class="list-item">{{data.name}}</span>
       </div>
     </ng-template>
-    <div class="list-container" (click)="logout()">
-      <i-bs name="bi bi-box-arrow-left"></i-bs>
-      <span class="list-item">Wyloguj się</span>
-    </div>
   </ejs-listview>
 </ejs-sidebar>
 <div id="maincontent" class="content">

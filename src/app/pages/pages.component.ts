@@ -22,6 +22,42 @@ export class PagesComponent implements OnInit {
     private timeout: any;
 
     constructor(private router: Router, private authService: AuthService) {
+      switch (this.authService.userData.role) {
+        case 'EMPLOYEE':
+          this.menuList = [
+            {
+              name: 'Moje projekty', 
+              icon: 'house-fill',
+              url: '/pages/my_projects'
+            }
+          ]
+          break;
+
+        case 'MANAGER':
+        this.menuList = [
+          {
+            name: 'Dashboard', 
+            icon: 'house-fill',
+            url: '/pages/dashboard'
+          },
+          {
+            name: 'Moje projekty', 
+            icon: 'house-fill',
+            url: '/pages/my_projects'
+          }
+        ]
+        break;
+
+        case 'CLIENT':
+        this.menuList = [
+          {
+            name: 'Dashboard', 
+            icon: 'house-fill',
+            url: '/pages/dashboard'
+          }
+        ]
+        break;
+      }
       this.menuList = [
         {
           name: 'Dashboard', 
@@ -42,7 +78,7 @@ export class PagesComponent implements OnInit {
     }
 
     pageChangeEvent(event) {
-        this.togglebtn.content = 'Close';
+        this.togglebtn.content = 'Zamknij';
         this.sidebar.show();
       }
 
@@ -52,17 +88,17 @@ export class PagesComponent implements OnInit {
 
     btnClick() {
         if (this.togglebtn.element.classList.contains('e-active')) {
-            this.togglebtn.content = 'Open';
+            this.togglebtn.content = 'Otwórz';
             this.sidebar.hide();
         } else {
-            this.togglebtn.content = 'Close';
+            this.togglebtn.content = 'Zamknij';
             this.sidebar.show();
         }
     }
 
     touchstart() {
         this.timeout = setInterval(() => {
-            this.togglebtn.content = 'Open';
+            this.togglebtn.content = 'Otwórz';
             this.sidebar.hide();
         }, 200);
       };

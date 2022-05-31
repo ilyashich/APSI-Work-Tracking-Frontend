@@ -10,10 +10,10 @@ import { HouseFill, WalletFill } from 'ngx-bootstrap-icons';
 import { PagesComponent } from './pages.component';
 import { PagesRoutingModule } from './pages-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { SummaryComponent } from './summary/summary.component';
 import { CommonService } from '../_services/common.service';
 import { RestApiService } from '../_services/rest_api.service';
 import { ContextProvider } from '../_services/context.provider';
+import { MyProjectsComponent } from './my_projects/my_projects.component';
 
 const icons = {
   HouseFill,
@@ -24,7 +24,7 @@ const icons = {
   declarations: [
     PagesComponent,
     DashboardComponent,
-    SummaryComponent
+    MyProjectsComponent
   ],
   imports: [
     GridModule,

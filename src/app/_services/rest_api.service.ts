@@ -29,6 +29,10 @@ export class RestApiService {
     return this.do_GET(this.baseUrl + '/persons');
   }
 
+  get_my_projects() {
+    return this.do_GET(this.baseUrl + '/person/' + this.authService.userData.username + '/projects');
+  }
+
   private do_GET(url: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization : this.authService.getAuthHeader
