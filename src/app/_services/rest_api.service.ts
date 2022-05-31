@@ -26,10 +26,10 @@ export class RestApiService {
     { }
 
   get_users() {
-    return this.doUnauthorized_GET(this.baseUrl + '/persons');
+    return this.do_GET(this.baseUrl + '/persons');
   }
 
-  private doUnauthorized_GET(url: string): Observable<any> {
+  private do_GET(url: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization : this.authService.getAuthHeader
     });

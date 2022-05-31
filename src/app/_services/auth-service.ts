@@ -12,10 +12,12 @@ export class AuthService {
 
   authenticated = false;
   authHeader: string;
+  userData: User;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) { }
 
-  get getAuthHeader() {return this.authHeader;}
+  get getAuthHeader() { return this.authHeader; }
+  get getUserData() { return this.userData; }
 
   setToken(token: string): void {
     localStorage.setItem('token', token);
@@ -36,25 +38,27 @@ export class AuthService {
 
   login({ login, password }: any): Promise<any> {
     const headers = new HttpHeaders({
-      Authorization : 'Basic ' + btoa(login + ':' + password)
+      Authorization: 'Basic ' + btoa(login + ':' + password)
     });
 
     return new Promise<string>((resolve, reject) => {
-        this.http.get(Consts.BACKEND_URL + 'user', {headers: headers}).subscribe((response : any) => {
-            console.log('login response: ' + response)
-            if (response['name']) {
-              console.log('this.authenticated = true')
-                this.authenticated = true;
-                this.authHeader = 'Basic ' + btoa(login + ':' + password);
-                // get token
-                this.setToken('abcdefghijklmnopqrstuvwxyz');
-                resolve(response['name']);
-            } else {
-                console.log('this.authenticated = false')
-                this.authenticated = false;
-                reject(new Error('Failed to login'));
-            }
+      this.http.get(Consts.BACKEND_URL + 'user', { headers: headers }).subscribe((userResponse: any) => {
+        if (userResponse['name']) {
+          var userName = userResponse['name'];
+          this.http.get(Consts.BACKEND_URL + 'person/' + userName, { headers: headers }).subscribe((personResponse: any) => {
+            this.authenticated = true;
+            this.authHeader = 'Basic ' + btoa(login + ':' + password);
+            // get token
+            this.setToken('abcdefghijklmnopqrstuvwxyz');
+            this.userData = new User(personResponse['id'], personResponse['username'], personResponse['name'], personResponse['surname'], personResponse['role']);
+            resolve(personResponse['name']);
           });
+        } else {
+          console.log('this.authenticated = false')
+          this.authenticated = false;
+          reject(new Error('Failed to login'));
+        }
+      });
     });
   }
 
