@@ -8,7 +8,7 @@ import { saveAs } from 'file-saver';
 import { Internationalization } from  '@syncfusion/ej2-base';  
 import { User } from 'src/app/_models/user';
 import { data } from './datasource';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-dashboard',
@@ -32,6 +32,9 @@ export class DashboardComponent implements OnInit {
   showDetails: boolean;
   private sub: any;
   id: string;
+  jobsFromProjects: boolean;
+  lastProjectId: string;
+  lastTaskId: string;
   //------------------------------------------------
   public commands: CommandModel[];
   @ViewChild('grid') public grid: GridComponent;
@@ -40,7 +43,8 @@ export class DashboardComponent implements OnInit {
     private commonService: CommonService,
     private restApiService: RestApiService,
     private contextProvider: ContextProvider,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
   }
 
@@ -50,16 +54,36 @@ export class DashboardComponent implements OnInit {
     });
     // -------------------------------------------------------------------------
     this.sub = this.route.params.subscribe(params => {
+      console.log(params['id']);
       this.id = params['id'];
-      this.showDetails = false;
-      this.contextProvider.getApiContext().subscribe((apiContext) => {
-        this.commonService.handleIncommingApiData(this.restApiService.get_data(params['id']),
-          this, {}, (data, additions, self) => {
-            self.data = data;
-          }, (error, errorAction) => {
-            // empty
-          });
-      });
+      this.data = null;
+      if (this.id.includes('details')) {
+        this.showDetails = true;
+        this.contextProvider.getApiContext().subscribe((apiContext) => {
+          this.commonService.handleIncommingApiData(this.restApiService.get_details(params['id'], this.lastProjectId, this.lastTaskId),
+            this, {}, (data, additions, self) => {
+              self.selectedData = data;
+              if (this.id == 'project_details') {
+                self.data = data.tasks;
+              }
+              if (this.id == 'task_details') {
+                self.data = data.jobs;
+              }
+            }, (error, errorAction) => {
+              // empty
+            });
+        });
+      } else {
+        this.showDetails = false;
+        this.contextProvider.getApiContext().subscribe((apiContext) => {
+          this.commonService.handleIncommingApiData(this.restApiService.get_data(params['id']),
+            this, {}, (data, additions, self) => {
+              self.data = data;
+            }, (error, errorAction) => {
+              // empty
+            });
+        });
+      }
     });
     // -------------------------------------------------------------------------
     this.pageSettings = {pageSizes: ['5', '10', '15', '20', '30', '50', '100', '500', '1000'], pageSize: 20 };
@@ -75,18 +99,67 @@ export class DashboardComponent implements OnInit {
     
   }
 
+  back() {
+    switch (this.id) {
+      case 'employee_details':
+        this.router.navigate(['/pages/dashboard', 'employees']);
+        break;
+
+      case 'project_details':
+        this.router.navigate(['/pages/dashboard', 'projects']);
+        break;
+
+      case 'task_details':
+        this.router.navigate(['/pages/dashboard', 'project_details']);
+        break;
+
+      case 'job_details':
+        if (this.jobsFromProjects) {
+          this.router.navigate(['/pages/dashboard', 'task_details']);
+        } else {
+          this.router.navigate(['/pages/dashboard', 'jobs']);
+        }
+        break;
+
+      case 'problem_details':
+        this.router.navigate(['/pages/dashboard', 'problems']);
+        break;
+    }
+  }
+
   recordClick(e: any) {
     this.selectedData = e.rowData;
     this.showDetails = true;
+    this.data = null;
     switch (this.id) {
       case 'projects':
         this.data = this.selectedData.tasks;
-        this.id = 'tasks';
+        this.lastProjectId = this.selectedData.projectId;
+        this.id = 'project_details';
         break;
 
-      case 'tasks':
+      case 'project_details':
         this.data = this.selectedData.jobs;
-        this.id = 'jobs';
+        this.lastTaskId = this.selectedData.taskId;
+        this.id = 'task_details';
+        break;
+
+      case 'task_details':
+        this.id = 'job_details';
+        this.jobsFromProjects = true;
+        break;
+
+      case 'employees':
+        this.id = 'employee_details';
+        break;
+
+      case 'problems':
+        this.id = 'problem_details';
+        break;
+
+      case 'jobs':
+        this.id = 'job_details';
+        this.jobsFromProjects = false;
         break;
     }
   }

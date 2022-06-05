@@ -43,14 +43,24 @@ export class RestApiService {
           return this.do_GET(this.baseUrl + '/job/all_to_accept');
         }
         if (this.authService.userData.role == 'EMPLOYEE') {
-          return this.do_GET(this.baseUrl + '/user/' + this.authService.userData.id + '/jobs');
+          return this.do_GET(this.baseUrl + '/user/' + this.authService.userData.username + '/jobs');
         }
         if (this.authService.userData.role == 'CLIENT') {
-          return this.do_GET(this.baseUrl + '/user/' + this.authService.userData.id + '/jobs_to_accept_by_client');
+          return this.do_GET(this.baseUrl + '/user/' + this.authService.userData.username + '/jobs_to_accept_by_client');
         }
 
       case 'problems':
         return this.do_GET(this.baseUrl + '/problem/all');
+    }
+  }
+
+  get_details(id: string, lastProjectId: string, lastTaskId: string) {
+    switch (id) {
+      case 'project_details':
+        return this.do_GET(this.baseUrl + '/project/get/' + lastProjectId);
+
+      case 'task_details':
+        return this.do_GET(this.baseUrl + '/task/get/' + lastTaskId);
     }
   }
 

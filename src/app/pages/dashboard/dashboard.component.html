@@ -1,6 +1,7 @@
 <div class="e-card" id="basic">
-    <ng-container *ngIf="showDetails && id=='employees'">
+    <ng-container *ngIf="showDetails && id=='employee_details'">
         <div class="e-card info-card d-flex flex-column" id="basic">
+            <i-bs name="arrow-left" height="30" width="30" style="margin-bottom: 30px;" (click)="back()"></i-bs>
             <span class="card-title">{{selectedData.name}} {{selectedData.surname}}</span>
             <span class="info-title">Informacje</span>
             <div class="d-flex flex-row justify-content-start">
@@ -27,8 +28,9 @@
             </div>
         </div>
     </ng-container>
-    <ng-container *ngIf="showDetails && id=='projects'">
+    <ng-container *ngIf="showDetails && id=='project_details'">
         <div class="e-card info-card d-flex flex-column" id="basic">
+            <i-bs name="arrow-left" height="30" width="30" style="margin-bottom: 30px;" (click)="back()"></i-bs>
             <span class="card-title">{{selectedData.name}}</span>
             <span class="info-title">Informacje</span>
             <div class="d-flex flex-row justify-content-start">
@@ -54,8 +56,8 @@
             </div>
             <div class="e-card-content" id="content">
                 <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
-                    [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
-                    (recordDoubleClick)="recordClick($event)">
+                    [filterSettings]='filterOptions' [pageSettings]='pageSettings'
+                    (actionComplete)='actionComplete($event)' (recordDoubleClick)="recordClick($event)">
                     <e-columns>
                         <e-column field='taskId' headerText='ID' textAlign='Left' width=60></e-column>
                         <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
@@ -65,8 +67,9 @@
             </div>
         </div>
     </ng-container>
-    <ng-container *ngIf="showDetails && id=='tasks'">
+    <ng-container *ngIf="showDetails && id=='task_details'">
         <div class="e-card info-card d-flex flex-column" id="basic">
+            <i-bs name="arrow-left" height="30" width="30" style="margin-bottom: 30px;"></i-bs>
             <span class="card-title">{{selectedData.name}}</span>
             <span class="info-title">Informacje</span>
             <div class="d-flex flex-row justify-content-start">
@@ -92,8 +95,8 @@
             </div>
             <div class="e-card-content" id="content">
                 <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
-                    [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
-                    (recordDoubleClick)="recordClick($event)">
+                    [filterSettings]='filterOptions' [pageSettings]='pageSettings'
+                    (actionComplete)='actionComplete($event)' (recordDoubleClick)="recordClick($event)">
                     <e-columns>
                         <e-column field='jobId' headerText='ID' textAlign='Left' width=60></e-column>
                         <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
@@ -107,8 +110,9 @@
             </div>
         </div>
     </ng-container>
-    <ng-container *ngIf="showDetails && id=='jobs'">
+    <ng-container *ngIf="showDetails && id=='job_details'">
         <div class="e-card info-card d-flex flex-column" id="basic">
+            <i-bs name="arrow-left" height="30" width="30" style="margin-bottom: 30px;"></i-bs>
             <span class="card-title">{{selectedData.name}}</span>
             <span class="info-title">Informacje</span>
             <div class="d-flex flex-row justify-content-start">
@@ -157,8 +161,9 @@
             </div>
         </div>
     </ng-container>
-    <ng-container *ngIf="showDetails && id=='problems'">
+    <ng-container *ngIf="showDetails && id=='problem_details'">
         <div class="e-card info-card d-flex flex-column" id="basic">
+            <i-bs name="arrow-left" height="30" width="30" style="margin-bottom: 30px;"></i-bs>
             <span class="card-title">{{selectedData.name}}</span>
             <span class="info-title">Informacje</span>
             <div class="d-flex flex-row justify-content-start">
@@ -186,9 +191,9 @@
                     </div>
                 </div>
                 <div class="e-card-content" id="content">
-                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
-                        [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
-                        (recordDoubleClick)="recordClick($event)">
+                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true"
+                        [allowFiltering]="true" [filterSettings]='filterOptions' [pageSettings]='pageSettings'
+                        (actionComplete)='actionComplete($event)' (recordDoubleClick)="recordClick($event)">
                         <e-columns>
                             <e-column field='id' headerText='ID' textAlign='Left' width=60></e-column>
                             <e-column field='name' headerText='Imię' textAlign='Left' width=100></e-column>
@@ -208,9 +213,9 @@
                     </div>
                 </div>
                 <div class="e-card-content" id="content">
-                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
-                        [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
-                        (recordDoubleClick)="recordClick($event)">
+                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true"
+                        [allowFiltering]="true" [filterSettings]='filterOptions' [pageSettings]='pageSettings'
+                        (actionComplete)='actionComplete($event)' (recordDoubleClick)="recordClick($event)">
                         <e-columns>
                             <e-column field='projectId' headerText='ID' textAlign='Left' width=60></e-column>
                             <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
@@ -228,9 +233,9 @@
                     </div>
                 </div>
                 <div class="e-card-content" id="content">
-                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
-                        [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
-                        (recordDoubleClick)="recordClick($event)">
+                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true"
+                        [allowFiltering]="true" [filterSettings]='filterOptions' [pageSettings]='pageSettings'
+                        (actionComplete)='actionComplete($event)' (recordDoubleClick)="recordClick($event)">
                         <e-columns>
                             <e-column field='taskId' headerText='ID' textAlign='Left' width=60></e-column>
                             <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
@@ -248,9 +253,9 @@
                     </div>
                 </div>
                 <div class="e-card-content" id="content">
-                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
-                        [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
-                        (recordDoubleClick)="recordClick($event)">
+                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true"
+                        [allowFiltering]="true" [filterSettings]='filterOptions' [pageSettings]='pageSettings'
+                        (actionComplete)='actionComplete($event)' (recordDoubleClick)="recordClick($event)">
                         <e-columns>
                             <e-column field='jobId' headerText='ID' textAlign='Left' width=60></e-column>
                             <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
@@ -272,9 +277,9 @@
                     </div>
                 </div>
                 <div class="e-card-content" id="content">
-                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
-                        [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
-                        (recordDoubleClick)="recordClick($event)">
+                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true"
+                        [allowFiltering]="true" [filterSettings]='filterOptions' [pageSettings]='pageSettings'
+                        (actionComplete)='actionComplete($event)' (recordDoubleClick)="recordClick($event)">
                         <e-columns>
                             <e-column field='problemId' headerText='ID' textAlign='Left' width=60></e-column>
                             <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>

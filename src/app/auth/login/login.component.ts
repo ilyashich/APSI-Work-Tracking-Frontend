@@ -29,7 +29,20 @@ export class LoginComponent implements OnInit {
           const fetchTokenWithTimeout = this.promiseTimeout(10000, this.auth.login(this.requestForm.value));
           fetchTokenWithTimeout.then(
             result => {
-              this.router.navigate(['pages/dashboard']);
+              switch (this.auth.userData.role) {
+                case 'EMPLOYEE':
+                  this.router.navigate(['pages/dashboard', 'projects']);
+                  break;
+
+                case 'MANAGER':
+                  this.router.navigate(['pages/dashboard', 'employees']);
+                  break;
+
+                case 'CLIENT':
+                  this.router.navigate(['pages/dashboard', 'jobs']);
+                  break;
+              }
+              
             }
           );
         }

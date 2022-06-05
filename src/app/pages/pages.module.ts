@@ -5,7 +5,7 @@ import { ButtonModule, RadioButtonModule } from '@syncfusion/ej2-angular-buttons
 import { SidebarModule } from '@syncfusion/ej2-angular-navigations';
 import { ListViewModule, VirtualizationService } from '@syncfusion/ej2-angular-lists';
 import { NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
-import { HouseFill, WalletFill, PersonFill, ListTask, ListCheck, ExclamationCircleFill } from 'ngx-bootstrap-icons';
+import { HouseFill, WalletFill, PersonFill, ListTask, ListCheck, ExclamationCircleFill, ArrowLeft } from 'ngx-bootstrap-icons';
 
 import { PagesComponent } from './pages.component';
 import { PagesRoutingModule } from './pages-routing.module';
@@ -21,7 +21,8 @@ const icons = {
   PersonFill,
   ListTask,
   ListCheck,
-  ExclamationCircleFill
+  ExclamationCircleFill,
+  ArrowLeft
 };
 
 @NgModule({
