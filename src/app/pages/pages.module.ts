@@ -14,6 +14,8 @@ import { CommonService } from '../_services/common.service';
 import { RestApiService } from '../_services/rest_api.service';
 import { ContextProvider } from '../_services/context.provider';
 import { CommonModule } from '@angular/common';
+import { ProgressButtonModule } from '@syncfusion/ej2-angular-splitbuttons';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 const icons = {
   HouseFill,
@@ -38,7 +40,9 @@ const icons = {
     SidebarModule,
     ListViewModule,
     PagesRoutingModule,
-    CommonModule
+    CommonModule,
+    ProgressButtonModule,
+    NgxSpinnerModule
   ],
   providers: [
     PageService,

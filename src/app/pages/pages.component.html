@@ -9,7 +9,7 @@
 <ejs-sidebar id="default-sidebar" #sidebar [type]='type' [enablePersistence]='enablePersistence' (created)="onCreated($event)" style="visibility: hidden" [target]='target'>
   <ejs-listview id='ui-list' [dataSource]='menuList'>
     <ng-template #template let-data="">
-      <div class="list-container" [routerLink] = "[data.url, data.id]">
+      <div class="list-container d-flex align-items-center" [routerLink] = "[data.url, data.id]">
           <i-bs name={{data.icon}}></i-bs>
           <span class="list-item">{{data.name}}</span>
       </div>

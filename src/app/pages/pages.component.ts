@@ -83,10 +83,10 @@ export class PagesComponent implements OnInit {
         default:
           this.menuList = [
             {
-              name: 'Pracownicy', 
-              icon: 'person-fill',
+              name: 'Czynności', 
+              icon: 'list-check',
               url: '/pages/dashboard',
-              id: 'employees'
+              id: 'jobs'
             }
           ]
           break;

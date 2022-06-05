@@ -9,6 +9,7 @@ import { Internationalization } from  '@syncfusion/ej2-base';
 import { User } from 'src/app/_models/user';
 import { data } from './datasource';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
     selector: 'app-dashboard',
@@ -44,7 +45,8 @@ export class DashboardComponent implements OnInit {
     private restApiService: RestApiService,
     private contextProvider: ContextProvider,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private spinner: NgxSpinnerService
   ) {
   }
 
@@ -69,6 +71,7 @@ export class DashboardComponent implements OnInit {
   }
 
   _getData() {
+    this.spinner.show();
     if (this.id.includes('details')) {
       this.showDetails = true;
       this.contextProvider.getApiContext().subscribe((apiContext) => {
@@ -81,7 +84,9 @@ export class DashboardComponent implements OnInit {
             if (this.id == 'task_details') {
               self.data = data.jobs;
             }
+            this.spinner.hide();
           }, (error, errorAction) => {
+            this.spinner.hide();
             // empty
           });
       });
@@ -91,7 +96,9 @@ export class DashboardComponent implements OnInit {
         this.commonService.handleIncommingApiData(this.restApiService.get_data(this.id),
           this, {}, (data, additions, self) => {
             self.data = data;
+            this.spinner.hide();
           }, (error, errorAction) => {
+            this.spinner.hide();
             // empty
           });
       });
@@ -106,7 +113,6 @@ export class DashboardComponent implements OnInit {
     switch (this.id) {
       case 'employee_details':
         this.id = 'employees';
-        this.router.navigate(['/pages/dashboard', 'employees']);
         break;
 
       case 'project_details':
@@ -173,5 +179,23 @@ export class DashboardComponent implements OnInit {
     if(JSON.stringify(args.requestType) == '"paging"'){
       this.pageChangeEvent();
     }
+  }
+
+  job_accept(id: string) {
+    this.spinner.show();
+    this.contextProvider.getApiContext().subscribe((apiContext) => {
+      this.commonService.handleIncommingApiData(this.restApiService.job_accept(this.id),
+        this, {}, (data, additions, self) => {
+          self.selectedData.state = 'ACCEPTED';
+          this.spinner.hide();
+        }, (error, errorAction) => {
+          this.spinner.hide();
+          // empty
+        });
+    });
+  }
+
+  job_reject(id: string) {
+
   }
 }

@@ -15,7 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
     AppRoutingModule,
     PagesModule,
     BrowserAnimationsModule,
-    AuthModule
+    AuthModule,
   ],
   providers: [
   ],

@@ -64,16 +64,36 @@ export class RestApiService {
     }
   }
 
-  get_users() {
-    return this.do_GET(this.baseUrl + '/persons');
+  job_accept(id: string) {
+    switch (this.authService.userData.role) {
+      case 'MANAGER':
+        return this.do_PUT(this.baseUrl + '/user/' + this.authService.userData.username  + '/job_to_accept/' + id, null); 
+
+      case 'CLIENT':
+        return this.do_PUT(this.baseUrl + '/user/' + this.authService.userData.username  + '/job_to_accept_by_client/' + id, null); 
+    }
   }
 
-  get_my_projects() {
-    return this.do_GET(this.baseUrl + '/person/' + this.authService.userData.username + '/projects');
+  job_reject(id: string, reason: string) {
+    var req = {
+      'reason': reason
+    };
+
+    switch (this.authService.userData.role) {
+      case 'MANAGER':
+        return this.do_PUT(this.baseUrl + '/user/' + this.authService.userData.username  + '/job_to_reject/' + id, req); 
+
+      case 'CLIENT':
+        return this.do_PUT(this.baseUrl + '/user/' + this.authService.userData.username  + '/job_to_reject_by_client/' + id, req); 
+    }
   }
 
-  get_problems() {
-    return this.do_GET(this.baseUrl + '/problem/all');
+  job_create(job: any) {
+    return this.do_POST(this.baseUrl + '/job/create', job); 
+  }
+
+  job_update(id: string, req: any) {
+    return this.do_PUT(this.baseUrl + '/job/update/' + id, req); 
   }
 
   private do_GET(url: string): Observable<any> {
@@ -96,6 +116,48 @@ export class RestApiService {
         }),
         );
     }
+
+  private do_PUT(url: string, req: any) {
+    const headers = new HttpHeaders({
+      Authorization : this.authService.getAuthHeader
+    });
+
+    return this.http.put<any>(url, req, {headers: headers}).pipe(
+        timeout(this.requestTimeout),
+        // ================
+        flatMap(response => of({ item: response, error: null })),
+        // ================
+        catchError(error => {
+            if (error && error.error && error.error.error === 'invalid_token') {
+            localStorage.clear();
+            this.router.navigate(['auth/login']);
+            }
+            // ----------
+            return of({ item: null, error: error });
+        }),
+        );
+  }
+
+  private do_POST(url: string, req: any) {
+    const headers = new HttpHeaders({
+      Authorization : this.authService.getAuthHeader
+    });
+
+    return this.http.post<any>(url, req, {headers: headers}).pipe(
+        timeout(this.requestTimeout),
+        // ================
+        flatMap(response => of({ item: response, error: null })),
+        // ================
+        catchError(error => {
+            if (error && error.error && error.error.error === 'invalid_token') {
+            localStorage.clear();
+            this.router.navigate(['auth/login']);
+            }
+            // ----------
+            return of({ item: null, error: error });
+        }),
+        );
+  }
 
   private doAuthorized_GET(url: string): Observable<any> {
     return this.http.get<any>(url, this.initAccessTokenHeaders(this.oauthService.getAccessToken(), undefined)).pipe(

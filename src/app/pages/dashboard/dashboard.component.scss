@@ -57,6 +57,13 @@
         &.row-value {
             font-weight: bold;
             margin-top: 3px;
+
+            &.green {
+                color: green;
+            }
+            &.red {
+                color: red;
+            }
         }
     }
 }

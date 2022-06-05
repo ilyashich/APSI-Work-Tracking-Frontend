@@ -1,4 +1,5 @@
 <div class="e-card" id="basic">
+    <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
     <ng-container *ngIf="showDetails && id=='employee_details'">
         <div class="e-card info-card d-flex flex-column" id="basic">
             <i-bs name="arrow-left" height="30" width="30" style="margin-bottom: 30px;" (click)="back()"></i-bs>
@@ -112,7 +113,13 @@
     </ng-container>
     <ng-container *ngIf="showDetails && id=='job_details'">
         <div class="e-card info-card d-flex flex-column" id="basic">
-            <i-bs name="arrow-left" height="30" width="30" style="margin-bottom: 30px;" (click)="back()"></i-bs>
+            <div class="d-flex justify-content-between align-items-center" style="padding-bottom: 30px;">
+                <i-bs name="arrow-left" height="30" width="30" (click)="back()"></i-bs>
+                <div class="d-flex justify-content-center" style="padding-left: 50px;">
+                    <button ejs-progressbutton content='Zaakceptuj' class="e-primary" style="background-color: green; padding: 15px" type="submit" (click)="job_accept(selectedData.jobId)"></button>
+                    <button ejs-progressbutton content='Odrzuć' class="e-primary" style="margin-left: 10px; padding: 15px" type="submit" (click)="job_reject(selectedData.jobId)"></button>
+                </div>
+            </div>
             <span class="card-title">{{selectedData.name}}</span>
             <span class="info-title">Informacje</span>
             <div class="d-flex flex-row justify-content-start">
@@ -129,7 +136,15 @@
                     <span class="row-value">{{selectedData.description}}</span>
                 </div>
             </div>
-            <div class="d-flex flex-row justify-content-start">
+            <div class="d-flex flex-row justify-content-start" style="padding-top: 20px;">
+                <div class="d-flex flex-column align-items-start">
+                    <span class="row-name">Status</span>
+                    <span class="row-value" [class.green]="selectedData.state == 'ACCEPTED'" [class.red]="selectedData.state == 'REJECTED'">{{selectedData.state}}</span>
+                </div>
+                <div *ngIf="selectedData.state == 'REJECTED'" class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Powód odrzucenia</span>
+                    <span class="row-value">{{selectedData.rejectionReason}}</span>
+                </div>
                 <div *ngIf="selectedData.date" class="d-flex flex-column align-items-start">
                     <span class="row-name">Data rozpoczęcia</span>
                     <span class="row-value">{{selectedData.date}}</span>
@@ -137,14 +152,6 @@
                 <div *ngIf="selectedData.time" class="d-flex flex-column align-items-start info-space">
                     <span class="row-name">Czas wykonania</span>
                     <span class="row-value">{{selectedData.time}}</span>
-                </div>
-                <div *ngIf="selectedData.state" class="d-flex flex-column align-items-start info-space">
-                    <span class="row-name">Status</span>
-                    <span class="row-value">{{selectedData.state}}</span>
-                </div>
-                <div *ngIf="selectedData.state == 'REJECTED'" class="d-flex flex-column align-items-start info-space">
-                    <span class="row-name">Powód odrzucenia</span>
-                    <span class="row-value">{{selectedData.rejectionReason}}</span>
                 </div>
                 <div *ngIf="selectedData.type" class="d-flex flex-column align-items-start info-space">
                     <span class="row-name">Typ</span>
