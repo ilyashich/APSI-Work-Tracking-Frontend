@@ -54,36 +54,9 @@ export class DashboardComponent implements OnInit {
     });
     // -------------------------------------------------------------------------
     this.sub = this.route.params.subscribe(params => {
-      console.log(params['id']);
       this.id = params['id'];
       this.data = null;
-      if (this.id.includes('details')) {
-        this.showDetails = true;
-        this.contextProvider.getApiContext().subscribe((apiContext) => {
-          this.commonService.handleIncommingApiData(this.restApiService.get_details(params['id'], this.lastProjectId, this.lastTaskId),
-            this, {}, (data, additions, self) => {
-              self.selectedData = data;
-              if (this.id == 'project_details') {
-                self.data = data.tasks;
-              }
-              if (this.id == 'task_details') {
-                self.data = data.jobs;
-              }
-            }, (error, errorAction) => {
-              // empty
-            });
-        });
-      } else {
-        this.showDetails = false;
-        this.contextProvider.getApiContext().subscribe((apiContext) => {
-          this.commonService.handleIncommingApiData(this.restApiService.get_data(params['id']),
-            this, {}, (data, additions, self) => {
-              self.data = data;
-            }, (error, errorAction) => {
-              // empty
-            });
-        });
-      }
+      this._getData();
     });
     // -------------------------------------------------------------------------
     this.pageSettings = {pageSizes: ['5', '10', '15', '20', '30', '50', '100', '500', '1000'], pageSize: 20 };
@@ -95,6 +68,36 @@ export class DashboardComponent implements OnInit {
     };
   }
 
+  _getData() {
+    if (this.id.includes('details')) {
+      this.showDetails = true;
+      this.contextProvider.getApiContext().subscribe((apiContext) => {
+        this.commonService.handleIncommingApiData(this.restApiService.get_details(this.id, this.lastProjectId, this.lastTaskId),
+          this, {}, (data, additions, self) => {
+            self.selectedData = data;
+            if (this.id == 'project_details') {
+              self.data = data.tasks;
+            }
+            if (this.id == 'task_details') {
+              self.data = data.jobs;
+            }
+          }, (error, errorAction) => {
+            // empty
+          });
+      });
+    } else {
+      this.showDetails = false;
+      this.contextProvider.getApiContext().subscribe((apiContext) => {
+        this.commonService.handleIncommingApiData(this.restApiService.get_data(this.id),
+          this, {}, (data, additions, self) => {
+            self.data = data;
+          }, (error, errorAction) => {
+            // empty
+          });
+      });
+    }
+  }
+
   pageChangeEvent() {
     
   }
@@ -102,29 +105,31 @@ export class DashboardComponent implements OnInit {
   back() {
     switch (this.id) {
       case 'employee_details':
+        this.id = 'employees';
         this.router.navigate(['/pages/dashboard', 'employees']);
         break;
 
       case 'project_details':
-        this.router.navigate(['/pages/dashboard', 'projects']);
+        this.id = 'projects';
         break;
 
       case 'task_details':
-        this.router.navigate(['/pages/dashboard', 'project_details']);
+        this.id = 'project_details';
         break;
 
       case 'job_details':
         if (this.jobsFromProjects) {
-          this.router.navigate(['/pages/dashboard', 'task_details']);
+          this.id = 'task_details';
         } else {
-          this.router.navigate(['/pages/dashboard', 'jobs']);
+          this.id = 'jobs';
         }
         break;
 
       case 'problem_details':
-        this.router.navigate(['/pages/dashboard', 'problems']);
+        this.id = 'problems';
         break;
     }
+    this._getData();
   }
 
   recordClick(e: any) {

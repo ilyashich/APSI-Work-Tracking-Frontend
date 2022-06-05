@@ -69,7 +69,7 @@
     </ng-container>
     <ng-container *ngIf="showDetails && id=='task_details'">
         <div class="e-card info-card d-flex flex-column" id="basic">
-            <i-bs name="arrow-left" height="30" width="30" style="margin-bottom: 30px;"></i-bs>
+            <i-bs name="arrow-left" height="30" width="30" style="margin-bottom: 30px;" (click)="back()"></i-bs>
             <span class="card-title">{{selectedData.name}}</span>
             <span class="info-title">Informacje</span>
             <div class="d-flex flex-row justify-content-start">
@@ -112,7 +112,7 @@
     </ng-container>
     <ng-container *ngIf="showDetails && id=='job_details'">
         <div class="e-card info-card d-flex flex-column" id="basic">
-            <i-bs name="arrow-left" height="30" width="30" style="margin-bottom: 30px;"></i-bs>
+            <i-bs name="arrow-left" height="30" width="30" style="margin-bottom: 30px;" (click)="back()"></i-bs>
             <span class="card-title">{{selectedData.name}}</span>
             <span class="info-title">Informacje</span>
             <div class="d-flex flex-row justify-content-start">
@@ -130,15 +130,15 @@
                 </div>
             </div>
             <div class="d-flex flex-row justify-content-start">
-                <div class="d-flex flex-column align-items-start">
+                <div *ngIf="selectedData.date" class="d-flex flex-column align-items-start">
                     <span class="row-name">Data rozpoczęcia</span>
                     <span class="row-value">{{selectedData.date}}</span>
                 </div>
-                <div class="d-flex flex-column align-items-start info-space">
+                <div *ngIf="selectedData.time" class="d-flex flex-column align-items-start info-space">
                     <span class="row-name">Czas wykonania</span>
                     <span class="row-value">{{selectedData.time}}</span>
                 </div>
-                <div class="d-flex flex-column align-items-start info-space">
+                <div *ngIf="selectedData.state" class="d-flex flex-column align-items-start info-space">
                     <span class="row-name">Status</span>
                     <span class="row-value">{{selectedData.state}}</span>
                 </div>
@@ -146,7 +146,7 @@
                     <span class="row-name">Powód odrzucenia</span>
                     <span class="row-value">{{selectedData.rejectionReason}}</span>
                 </div>
-                <div class="d-flex flex-column align-items-start info-space">
+                <div *ngIf="selectedData.type" class="d-flex flex-column align-items-start info-space">
                     <span class="row-name">Typ</span>
                     <span class="row-value">{{selectedData.type}}</span>
                 </div>
@@ -156,14 +156,14 @@
                 </div>
                 <div *ngIf="selectedData.type == 'PROBLEM'" class="d-flex flex-column align-items-start info-space">
                     <span class="row-name">Problem</span>
-                    <span class="row-value">{{selectedData.problem}}</span>
+                    <span class="row-value">{{selectedData.problem.problemId}} - {{selectedData.problem.name}}</span>
                 </div>
             </div>
         </div>
     </ng-container>
     <ng-container *ngIf="showDetails && id=='problem_details'">
         <div class="e-card info-card d-flex flex-column" id="basic">
-            <i-bs name="arrow-left" height="30" width="30" style="margin-bottom: 30px;"></i-bs>
+            <i-bs name="arrow-left" height="30" width="30" style="margin-bottom: 30px;" (click)="back()"></i-bs>
             <span class="card-title">{{selectedData.name}}</span>
             <span class="info-title">Informacje</span>
             <div class="d-flex flex-row justify-content-start">
