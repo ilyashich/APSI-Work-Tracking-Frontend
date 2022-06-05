@@ -3,19 +3,14 @@ import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { MyProjectsComponent } from './my_projects/my_projects.component';
 
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [
     {
-      path: 'dashboard',
+      path: 'dashboard/:id',
       component: DashboardComponent,
-    },
-    {
-      path: 'my_projects',
-      component: MyProjectsComponent,
     },
     {
       path: '',

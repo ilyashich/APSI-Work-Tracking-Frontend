@@ -25,12 +25,45 @@ export class RestApiService {
     private authService: AuthService) 
     { }
 
+  get_data(id: string) {
+    switch (id) {
+      case 'employees':
+        return this.do_GET(this.baseUrl + '/persons');
+
+      case 'projects':
+        if (this.authService.userData.role == 'MANAGER') {
+          return this.do_GET(this.baseUrl + '/project/all');
+        }
+        if (this.authService.userData.role == 'EMPLOYEE') {
+          return this.do_GET(this.baseUrl + '/person/' + this.authService.userData.username + '/projects');
+        }
+
+      case 'jobs':
+        if (this.authService.userData.role == 'MANAGER') {
+          return this.do_GET(this.baseUrl + '/job/all_to_accept');
+        }
+        if (this.authService.userData.role == 'EMPLOYEE') {
+          return this.do_GET(this.baseUrl + '/user/' + this.authService.userData.id + '/jobs');
+        }
+        if (this.authService.userData.role == 'CLIENT') {
+          return this.do_GET(this.baseUrl + '/user/' + this.authService.userData.id + '/jobs_to_accept_by_client');
+        }
+
+      case 'problems':
+        return this.do_GET(this.baseUrl + '/problem/all');
+    }
+  }
+
   get_users() {
     return this.do_GET(this.baseUrl + '/persons');
   }
 
   get_my_projects() {
     return this.do_GET(this.baseUrl + '/person/' + this.authService.userData.username + '/projects');
+  }
+
+  get_problems() {
+    return this.do_GET(this.baseUrl + '/problem/all');
   }
 
   private do_GET(url: string): Observable<any> {

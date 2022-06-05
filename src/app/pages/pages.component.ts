@@ -22,49 +22,76 @@ export class PagesComponent implements OnInit {
     private timeout: any;
 
     constructor(private router: Router, private authService: AuthService) {
-      switch (this.authService.userData.role) {
+      switch (this.authService.userData ? this.authService.userData.role : '') {
         case 'EMPLOYEE':
           this.menuList = [
             {
               name: 'Moje projekty', 
               icon: 'house-fill',
-              url: '/pages/my_projects'
+              url: '/pages/dashboard',
+              id: 'projects'
+            },
+            {
+              name: 'Moje czynności', 
+              icon: 'list-task',
+              url: '/pages/dashboard',
+              id: 'jobs'
             }
           ]
           break;
 
         case 'MANAGER':
-        this.menuList = [
-          {
-            name: 'Dashboard', 
-            icon: 'house-fill',
-            url: '/pages/dashboard'
-          },
-          {
-            name: 'Moje projekty', 
-            icon: 'house-fill',
-            url: '/pages/my_projects'
-          }
-        ]
-        break;
+          this.menuList = [
+            {
+              name: 'Pracownicy', 
+              icon: 'person-fill',
+              url: '/pages/dashboard',
+              id: 'employees'
+            },
+            {
+              name: 'Projekty', 
+              icon: 'house-fill',
+              url: '/pages/dashboard',
+              id: 'projects'
+            },
+            {
+              name: 'Czynności do akceptacji', 
+              icon: 'list-check',
+              url: '/pages/dashboard',
+              id: 'jobs'
+            },
+            {
+              name: 'Repozytorium problemów', 
+              icon: 'exclamation-circle-fill',
+              url: '/pages/dashboard',
+              id: 'problems'
+            }
+          ]
+          break;
 
         case 'CLIENT':
-        this.menuList = [
-          {
-            name: 'Dashboard', 
-            icon: 'house-fill',
-            url: '/pages/dashboard'
-          }
-        ]
-        break;
+          this.menuList = [
+            {
+              name: 'Czynności', 
+              icon: 'list-check',
+              url: '/pages/dashboard',
+              id: 'jobs'
+            }
+          ]
+          break;
+
+        default:
+          this.menuList = [
+            {
+              name: 'Pracownicy', 
+              icon: 'person-fill',
+              url: '/pages/dashboard',
+              id: 'employees'
+            }
+          ]
+          break;
+          
       }
-      this.menuList = [
-        {
-          name: 'Dashboard', 
-          icon: 'house-fill',
-          url: '/pages/dashboard'
-        }
-      ]
     }
   
     ngOnInit(): void {

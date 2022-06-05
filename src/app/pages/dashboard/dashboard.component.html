@@ -1,22 +1,288 @@
 <div class="e-card" id="basic">
-  <div class="card-content">
-      <div class="e-card-header">
-          <div class="e-card-header-caption">
-              <div class="e-card-title">Uzytkownicy</div>
-          </div>
-      </div>
-      <div class="e-card-content" id="content">
-          <ejs-grid #grid [dataSource]='users' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true" [filterSettings]='filterOptions' 
-          [pageSettings]='pageSettings' [editSettings]='editSettings' [toolbar]='toolbar' (commandClick)='commandClick($event)' (actionComplete)='actionComplete($event)'>
-              <e-columns>
-                  <e-column field='id' headerText='ID' textAlign='Left' width=60></e-column>
-                  <e-column field='name' headerText='Imię' textAlign='Left' width=100></e-column>
-                  <e-column field='surname' headerText='Naziwsko' textAlign='Left' width=150></e-column>
-                  <e-column field='username' headerText='Login' textAlign='Left' width=100></e-column>
-                  <e-column field='role' headerText='Rola' textAlign='Left' width=80></e-column>
-                  <e-column headerText='Commands' width=80 [commands]='commands'></e-column>
-              </e-columns>
-          </ejs-grid>
-      </div>
-  </div>
+    <ng-container *ngIf="showDetails && id=='employees'">
+        <div class="e-card info-card d-flex flex-column" id="basic">
+            <span class="card-title">{{selectedData.name}} {{selectedData.surname}}</span>
+            <span class="info-title">Informacje</span>
+            <div class="d-flex flex-row justify-content-start">
+                <div class="d-flex flex-column align-items-start">
+                    <span class="row-name">ID</span>
+                    <span class="row-value">{{selectedData.id}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Imię</span>
+                    <span class="row-value">{{selectedData.name}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Nazwisko</span>
+                    <span class="row-value">{{selectedData.surname}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Login</span>
+                    <span class="row-value">{{selectedData.username}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Rola</span>
+                    <span class="row-value">{{selectedData.role}}</span>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="showDetails && id=='projects'">
+        <div class="e-card info-card d-flex flex-column" id="basic">
+            <span class="card-title">{{selectedData.name}}</span>
+            <span class="info-title">Informacje</span>
+            <div class="d-flex flex-row justify-content-start">
+                <div class="d-flex flex-column align-items-start">
+                    <span class="row-name">ID</span>
+                    <span class="row-value">{{selectedData.projectId}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Nazwa</span>
+                    <span class="row-value">{{selectedData.name}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Opis</span>
+                    <span class="row-value">{{selectedData.description}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="e-card-header">
+                <div class="e-card-header-caption">
+                    <div class="e-card-title">Zadania</div>
+                </div>
+            </div>
+            <div class="e-card-content" id="content">
+                <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
+                    [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
+                    (recordDoubleClick)="recordClick($event)">
+                    <e-columns>
+                        <e-column field='taskId' headerText='ID' textAlign='Left' width=60></e-column>
+                        <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
+                        <e-column field='description' headerText='Opis' textAlign='Left' width=200></e-column>
+                    </e-columns>
+                </ejs-grid>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="showDetails && id=='tasks'">
+        <div class="e-card info-card d-flex flex-column" id="basic">
+            <span class="card-title">{{selectedData.name}}</span>
+            <span class="info-title">Informacje</span>
+            <div class="d-flex flex-row justify-content-start">
+                <div class="d-flex flex-column align-items-start">
+                    <span class="row-name">ID</span>
+                    <span class="row-value">{{selectedData.taskId}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Nazwa</span>
+                    <span class="row-value">{{selectedData.name}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Opis</span>
+                    <span class="row-value">{{selectedData.description}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="e-card-header">
+                <div class="e-card-header-caption">
+                    <div class="e-card-title">Czynności pracowników</div>
+                </div>
+            </div>
+            <div class="e-card-content" id="content">
+                <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
+                    [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
+                    (recordDoubleClick)="recordClick($event)">
+                    <e-columns>
+                        <e-column field='jobId' headerText='ID' textAlign='Left' width=60></e-column>
+                        <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
+                        <e-column field='description' headerText='Opis' textAlign='Left' width=150></e-column>
+                        <e-column field='date' headerText='Data' textAlign='Left' width=80></e-column>
+                        <e-column field='time' headerText='Czas wykonania' textAlign='Left' width=60></e-column>
+                        <e-column field='state' headerText='Status' textAlign='Left' width=80></e-column>
+                        <e-column field='type' headerText='Typ' textAlign='Left' width=80></e-column>
+                    </e-columns>
+                </ejs-grid>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="showDetails && id=='jobs'">
+        <div class="e-card info-card d-flex flex-column" id="basic">
+            <span class="card-title">{{selectedData.name}}</span>
+            <span class="info-title">Informacje</span>
+            <div class="d-flex flex-row justify-content-start">
+                <div class="d-flex flex-column align-items-start">
+                    <span class="row-name">ID</span>
+                    <span class="row-value">{{selectedData.jobId}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Nazwa</span>
+                    <span class="row-value">{{selectedData.name}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Opis</span>
+                    <span class="row-value">{{selectedData.description}}</span>
+                </div>
+            </div>
+            <div class="d-flex flex-row justify-content-start">
+                <div class="d-flex flex-column align-items-start">
+                    <span class="row-name">Data rozpoczęcia</span>
+                    <span class="row-value">{{selectedData.date}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Czas wykonania</span>
+                    <span class="row-value">{{selectedData.time}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Status</span>
+                    <span class="row-value">{{selectedData.state}}</span>
+                </div>
+                <div *ngIf="selectedData.state == 'REJECTED'" class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Powód odrzucenia</span>
+                    <span class="row-value">{{selectedData.rejectionReason}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Typ</span>
+                    <span class="row-value">{{selectedData.type}}</span>
+                </div>
+                <div *ngIf="selectedData.type == 'DOCUMENT'" class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Dokument</span>
+                    <span class="row-value">{{selectedData.documentUrl}}</span>
+                </div>
+                <div *ngIf="selectedData.type == 'PROBLEM'" class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Problem</span>
+                    <span class="row-value">{{selectedData.problem}}</span>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="showDetails && id=='problems'">
+        <div class="e-card info-card d-flex flex-column" id="basic">
+            <span class="card-title">{{selectedData.name}}</span>
+            <span class="info-title">Informacje</span>
+            <div class="d-flex flex-row justify-content-start">
+                <div class="d-flex flex-column align-items-start">
+                    <span class="row-name">ID</span>
+                    <span class="row-value">{{selectedData.problemId}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Nazwa</span>
+                    <span class="row-value">{{selectedData.name}}</span>
+                </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Opis</span>
+                    <span class="row-value">{{selectedData.description}}</span>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!showDetails" [ngSwitch]="id">
+        <ng-container *ngSwitchCase="'employees'">
+            <div class="card-content">
+                <div class="e-card-header">
+                    <div class="e-card-header-caption">
+                        <div class="e-card-title">Pracownicy</div>
+                    </div>
+                </div>
+                <div class="e-card-content" id="content">
+                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
+                        [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
+                        (recordDoubleClick)="recordClick($event)">
+                        <e-columns>
+                            <e-column field='id' headerText='ID' textAlign='Left' width=60></e-column>
+                            <e-column field='name' headerText='Imię' textAlign='Left' width=100></e-column>
+                            <e-column field='surname' headerText='Naziwsko' textAlign='Left' width=150></e-column>
+                            <e-column field='username' headerText='Login' textAlign='Left' width=100></e-column>
+                            <e-column field='role' headerText='Rola' textAlign='Left' width=80></e-column>
+                        </e-columns>
+                    </ejs-grid>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'projects'">
+            <div class="card-content">
+                <div class="e-card-header">
+                    <div class="e-card-header-caption">
+                        <div class="e-card-title">Projekty</div>
+                    </div>
+                </div>
+                <div class="e-card-content" id="content">
+                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
+                        [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
+                        (recordDoubleClick)="recordClick($event)">
+                        <e-columns>
+                            <e-column field='projectId' headerText='ID' textAlign='Left' width=60></e-column>
+                            <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
+                            <e-column field='description' headerText='Opis' textAlign='Left' width=200></e-column>
+                        </e-columns>
+                    </ejs-grid>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'tasks'">
+            <div class="card-content">
+                <div class="e-card-header">
+                    <div class="e-card-header-caption">
+                        <div class="e-card-title">Zadania</div>
+                    </div>
+                </div>
+                <div class="e-card-content" id="content">
+                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
+                        [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
+                        (recordDoubleClick)="recordClick($event)">
+                        <e-columns>
+                            <e-column field='taskId' headerText='ID' textAlign='Left' width=60></e-column>
+                            <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
+                            <e-column field='description' headerText='Opis' textAlign='Left' width=200></e-column>
+                        </e-columns>
+                    </ejs-grid>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'jobs'">
+            <div class="card-content">
+                <div class="e-card-header">
+                    <div class="e-card-header-caption">
+                        <div class="e-card-title">Czynności pracowników</div>
+                    </div>
+                </div>
+                <div class="e-card-content" id="content">
+                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
+                        [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
+                        (recordDoubleClick)="recordClick($event)">
+                        <e-columns>
+                            <e-column field='jobId' headerText='ID' textAlign='Left' width=60></e-column>
+                            <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
+                            <e-column field='description' headerText='Opis' textAlign='Left' width=150></e-column>
+                            <e-column field='date' headerText='Data' textAlign='Left' width=80></e-column>
+                            <e-column field='time' headerText='Czas wykonania' textAlign='Left' width=60></e-column>
+                            <e-column field='state' headerText='Status' textAlign='Left' width=80></e-column>
+                            <e-column field='type' headerText='Typ' textAlign='Left' width=80></e-column>
+                        </e-columns>
+                    </ejs-grid>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'problems'">
+            <div class="card-content">
+                <div class="e-card-header">
+                    <div class="e-card-header-caption">
+                        <div class="e-card-title">Repozytorium problemów</div>
+                    </div>
+                </div>
+                <div class="e-card-content" id="content">
+                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
+                        [filterSettings]='filterOptions' [pageSettings]='pageSettings' (actionComplete)='actionComplete($event)'
+                        (recordDoubleClick)="recordClick($event)">
+                        <e-columns>
+                            <e-column field='problemId' headerText='ID' textAlign='Left' width=60></e-column>
+                            <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
+                            <e-column field='description' headerText='Opis' textAlign='Left' width=200></e-column>
+                        </e-columns>
+                    </ejs-grid>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
 </div>

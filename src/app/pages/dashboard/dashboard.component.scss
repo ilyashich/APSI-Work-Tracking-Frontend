@@ -31,3 +31,36 @@
 .e-pdfexport::before {
     content: "\f1c1"
   }
+
+.info-card {
+    padding: 40px;
+
+    span {
+        font-size: 14px;
+        letter-spacing: 0.02em;
+        color: #333333;
+
+        &.card-title {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 40px
+        }
+        &.info-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        &.row-name {
+            font-size: 18px;
+            color: #828282;
+            line-height: 20px;
+        }
+        &.row-value {
+            font-weight: bold;
+            margin-top: 3px;
+        }
+    }
+}
+
+.info-space {
+    padding-left: 40px;
+}

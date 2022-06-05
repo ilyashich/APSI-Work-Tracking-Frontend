@@ -5,7 +5,7 @@ import { ButtonModule, RadioButtonModule } from '@syncfusion/ej2-angular-buttons
 import { SidebarModule } from '@syncfusion/ej2-angular-navigations';
 import { ListViewModule, VirtualizationService } from '@syncfusion/ej2-angular-lists';
 import { NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
-import { HouseFill, WalletFill } from 'ngx-bootstrap-icons';
+import { HouseFill, WalletFill, PersonFill, ListTask, ListCheck, ExclamationCircleFill } from 'ngx-bootstrap-icons';
 
 import { PagesComponent } from './pages.component';
 import { PagesRoutingModule } from './pages-routing.module';
@@ -13,18 +13,21 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CommonService } from '../_services/common.service';
 import { RestApiService } from '../_services/rest_api.service';
 import { ContextProvider } from '../_services/context.provider';
-import { MyProjectsComponent } from './my_projects/my_projects.component';
+import { CommonModule } from '@angular/common';
 
 const icons = {
   HouseFill,
-  WalletFill
+  WalletFill,
+  PersonFill,
+  ListTask,
+  ListCheck,
+  ExclamationCircleFill
 };
 
 @NgModule({
   declarations: [
     PagesComponent,
-    DashboardComponent,
-    MyProjectsComponent
+    DashboardComponent
   ],
   imports: [
     GridModule,
@@ -33,7 +36,8 @@ const icons = {
     RadioButtonModule,
     SidebarModule,
     ListViewModule,
-    PagesRoutingModule
+    PagesRoutingModule,
+    CommonModule
   ],
   providers: [
     PageService,
