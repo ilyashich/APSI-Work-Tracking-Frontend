@@ -10,6 +10,8 @@ import { User } from 'src/app/_models/user';
 import { data } from './datasource';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogComponent } from '@syncfusion/ej2-angular-popups';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-dashboard',
@@ -36,9 +38,15 @@ export class DashboardComponent implements OnInit {
   jobsFromProjects: boolean;
   lastProjectId: string;
   lastTaskId: string;
+  showDialog: boolean = false;
   //------------------------------------------------
   public commands: CommandModel[];
   @ViewChild('grid') public grid: GridComponent;
+  @ViewChild('ejDialog') ejDialog: DialogComponent;
+  //------------------------------------------------
+  requestForm = new FormGroup({
+    reason: new FormControl('', Validators.required),
+  });
 
   constructor(
     private commonService: CommonService,
@@ -184,7 +192,7 @@ export class DashboardComponent implements OnInit {
   job_accept(id: string) {
     this.spinner.show();
     this.contextProvider.getApiContext().subscribe((apiContext) => {
-      this.commonService.handleIncommingApiData(this.restApiService.job_accept(this.id),
+      this.commonService.handleIncommingApiData(this.restApiService.job_accept(this.selectedData.jobId),
         this, {}, (data, additions, self) => {
           self.selectedData.state = 'ACCEPTED';
           this.spinner.hide();
@@ -196,6 +204,41 @@ export class DashboardComponent implements OnInit {
   }
 
   job_reject(id: string) {
+    this.spinner.show();
+    this.contextProvider.getApiContext().subscribe((apiContext) => {
+      this.commonService.handleIncommingApiData(this.restApiService.job_reject(this.selectedData.jobId, this.requestForm.value.reason),
+        this, {}, (data, additions, self) => {
+          this.ejDialog.hide();
+          self.selectedData.state = 'REJECTED';
+          this.spinner.hide();
+        }, (error, errorAction) => {
+          this.spinner.hide();
+          // empty
+        });
+    });
+  }
 
+  onOpenDialog() {
+    this.showDialog = true;
+    this.ejDialog.show();
+  };
+
+  onOverlayClick() {
+    this.showDialog = false;
+    this.ejDialog.hide();
+  }
+
+  get reason() { return this.requestForm.get('reason'); }
+
+  getError(el) {
+    switch (el) {
+      case 'reason':
+        if (this.requestForm.get('reason').hasError('required')) {
+          return 'Powód jest wymagany';
+        }
+        break;
+      default:
+        return '';
+    }
   }
 }

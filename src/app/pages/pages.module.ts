@@ -16,6 +16,10 @@ import { ContextProvider } from '../_services/context.provider';
 import { CommonModule } from '@angular/common';
 import { ProgressButtonModule } from '@syncfusion/ej2-angular-splitbuttons';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { DialogModule } from '@syncfusion/ej2-angular-popups';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AngularMaterialModule } from '../angular-material.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 const icons = {
   HouseFill,
@@ -42,7 +46,11 @@ const icons = {
     PagesRoutingModule,
     CommonModule,
     ProgressButtonModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    DialogModule,
+    FormsModule, ReactiveFormsModule,
+    AngularMaterialModule,
+    FlexLayoutModule,
   ],
   providers: [
     PageService,

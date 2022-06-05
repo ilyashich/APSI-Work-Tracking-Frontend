@@ -28,6 +28,7 @@
     "@syncfusion/ej2-angular-inputs": "^18.4.47",
     "@syncfusion/ej2-angular-lists": "^18.4.39",
     "@syncfusion/ej2-angular-navigations": "^18.4.47",
+    "@syncfusion/ej2-angular-popups": "^20.1.58",
     "@syncfusion/ej2-angular-splitbuttons": "^18.4.41",
     "angular-oauth2-oidc": "^10.0.3",
     "file-saver": "^2.0.5",

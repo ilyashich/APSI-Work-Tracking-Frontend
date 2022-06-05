@@ -117,7 +117,7 @@
                 <i-bs name="arrow-left" height="30" width="30" (click)="back()"></i-bs>
                 <div class="d-flex justify-content-center" style="padding-left: 50px;">
                     <button ejs-progressbutton content='Zaakceptuj' class="e-primary" style="background-color: green; padding: 15px" type="submit" (click)="job_accept(selectedData.jobId)"></button>
-                    <button ejs-progressbutton content='Odrzuć' class="e-primary" style="margin-left: 10px; padding: 15px" type="submit" (click)="job_reject(selectedData.jobId)"></button>
+                    <button ejs-progressbutton content='Odrzuć' class="e-primary" style="margin-left: 10px; padding: 15px" type="submit" (click)="onOpenDialog()"></button>
                 </div>
             </div>
             <span class="card-title">{{selectedData.name}}</span>
@@ -167,6 +167,23 @@
                 </div>
             </div>
         </div>
+        <ejs-dialog *ngIf="showDialog" #template showCloseIcon='true' id='dialog' #ejDialog isModal='true' (overlayClick)="onOverlayClick()" width='400px'>
+            <ng-template #content>
+                <div class="dialogContent">
+                    <form class="example-form" [formGroup]="requestForm" id="requestForm">
+                        <mat-card-content>
+                          <mat-form-field style="width: -webkit-fill-available">
+                            <input matInput placeholder="Powód odrzucenia" [formControl]="reason" type="text">
+                            <mat-error *ngIf="requestForm.controls['reason'].invalid">
+                              {{getError('reason')}}
+                            </mat-error>
+                          </mat-form-field>
+                        </mat-card-content>
+                        <button ejs-progressbutton content='Wyślij' class="e-primary" type="submit" [disabled]="!requestForm.valid" (click)="job_reject(selectedData.jobId)"></button>
+                      </form>
+                </div>
+            </ng-template>
+        </ejs-dialog>
     </ng-container>
     <ng-container *ngIf="showDetails && id=='problem_details'">
         <div class="e-card info-card d-flex flex-column" id="basic">
