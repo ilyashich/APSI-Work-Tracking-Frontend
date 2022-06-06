@@ -51,6 +51,9 @@ export class RestApiService {
 
       case 'problems':
         return this.do_GET(this.baseUrl + '/problem/all');
+
+      case 'tasks':
+        return this.do_GET(this.baseUrl + '/user/' + this.authService.userData.username + '/tasks');
     }
   }
 

@@ -15,6 +15,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/_services/auth-service';
 import { L10n } from '@syncfusion/ej2-base';
 import { Query, DataManager } from '@syncfusion/ej2-data';
+import { Problem } from 'src/app/_models/problem';
+import { Task } from 'src/app/_models/task';
 
 L10n.load({
   'en-US': {
@@ -61,7 +63,10 @@ export class DashboardComponent implements OnInit {
   public commands: CommandModel[];
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('ejDialog') ejDialog: DialogComponent;
+  @ViewChild('jobForm') jobForm: FormGroup;
   public dateValue: Date = new Date();
+  public problems: Problem[];
+  public tasks: Task[];
   //------------------------------------------------
   requestForm = new FormGroup({
     reason: new FormControl('', Validators.required),
@@ -113,6 +118,22 @@ export class DashboardComponent implements OnInit {
           actionComplete: () => false,
       }
     };
+    this.contextProvider.getApiContext().subscribe((apiContext) => {
+      this.commonService.handleIncommingApiData(this.restApiService.get_data('problems'),
+        this, {}, (data, additions, self) => {
+          self.problems = data;
+        }, (error, errorAction) => {
+          // empty
+        });
+    });
+    this.contextProvider.getApiContext().subscribe((apiContext) => {
+      this.commonService.handleIncommingApiData(this.restApiService.get_data('tasks'),
+        this, {}, (data, additions, self) => {
+          self.tasks = data;
+        }, (error, errorAction) => {
+          // empty
+        });
+    });
   }
 
   _getData() {
@@ -221,12 +242,36 @@ export class DashboardComponent implements OnInit {
   }
 
   actionBegin(args) {
-    if ((args.requestType === 'add')) {
-        for (const cols of this.grid.columns) {
-            if ((cols as Column).field === 'jobId' || (cols as Column).field === 'state' || (cols as Column).field === 'problem' || (cols as Column).field === 'document') {
-                (cols as Column).visible = false;
-            }
+    if ((args.requestType === 'save')) {
+      var req = {
+        'name': this.jobForm.value.name,
+        'description': this.jobForm.value.description,
+        'time': this.jobForm.value.time,
+        'date': this.jobForm.value.date,
+        'type': this.jobForm.value.type,
+        'problem': {
+          'problemId': this.jobForm.value.problemId ? this.jobForm.value.problemId : null
+        },
+        'documentUrl': this.jobForm.value.documentUrl ? this.jobForm.value.documentUrl : null,
+        'employee': {
+          'id': this.auth.userData.id
+        },
+        'task': {
+          'taskId': this.jobForm.value.task,
         }
+      };
+      console.log(req)
+      this.spinner.show();
+      this.contextProvider.getApiContext().subscribe((apiContext) => {
+        this.commonService.handleIncommingApiData(this.restApiService.job_create(req),
+          this, {}, (data, additions, self) => {
+            this._getData();
+            this.spinner.hide();
+          }, (error, errorAction) => {
+            this.spinner.hide();
+            // empty
+          });
+      });
     }
   }
 

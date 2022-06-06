@@ -115,7 +115,7 @@
         <div class="e-card info-card d-flex flex-column" id="basic">
             <div class="d-flex justify-content-between align-items-center" style="padding-bottom: 30px;">
                 <i-bs name="arrow-left" height="30" width="30" (click)="back()"></i-bs>
-                <div class="d-flex justify-content-center" style="padding-left: 50px;">
+                <div class="d-flex justify-content-center" style="padding-left: 50px;" [hidden]="userRole == 'EMPLOYEE' || selectedData.state == 'REJECTED' || (selectedData.state == 'ACCEPTED' && userRole == 'MANAGER')">
                     <button ejs-progressbutton content='Zaakceptuj' class="e-primary"
                         style="background-color: green; padding: 15px" type="submit"
                         (click)="job_accept(selectedData.jobId)"></button>
@@ -301,8 +301,6 @@
                                 <e-column field='state' headerText='Status' textAlign='Left' width=80></e-column>
                                 <e-column field='type' headerText='Typ' textAlign='Left' width=80 editType= 'dropdownedit'
                                 [edit]='typeParams'></e-column>
-                                <e-column field='problem' headerText='Problem' textAlign='Left' width=80></e-column>
-                                <e-column field='documentUrl' headerText='Dokument' textAlign='Left' width=80></e-column>
                             </e-columns>
                             <ng-template #editSettingsTemplate let-data>
                                 <div ngForm #jobForm="ngForm">
@@ -310,7 +308,7 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
                                                 <div class="e-float-input e-control-wrapper">
-                                                    <input [(ngModel)]="data.name" required id="name" name="Nazwa" type="text" #name="ngModel">
+                                                    <input [(ngModel)]="data.name" required id="name" name="name" type="text" #name="ngModel">
                                                     <span class="e-float-line"></span>
                                                     <label class="e-float-text e-label-top" for="name">Nazwa</label>
                                                 </div>
@@ -319,7 +317,7 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
                                                 <div class="e-float-input e-control-wrapper">
-                                                    <input [(ngModel)]="data.description" required id="description" name="Opis" type="text" #description="ngModel">
+                                                    <input [(ngModel)]="data.description" required id="description" name="description" type="text" #description="ngModel">
                                                     <span class="e-float-line"></span>
                                                     <label class="e-float-text e-label-top" for="description">Opis</label>
                                                 </div>
@@ -328,21 +326,44 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
                                                 <div class="e-float-input e-control-wrapper">
-                                                    <ejs-datepicker [(ngModel)]="data.date" required id="date" [value]='dateValue' placeholder='Data' floatLabelType= 'Auto' #date="ngModel"></ejs-datepicker>
+                                                    <ejs-dropdownlist id="task" name="task" [(ngModel)]="data.task" [dataSource]='tasks' [fields]="{text: 'name', value: 'taskId' }" placeholder="Zadanie" popupHeight='300px' floatLabelType='Auto'></ejs-dropdownlist>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
                                                 <div class="e-float-input e-control-wrapper">
-                                                    <ejs-numerictextbox [(ngModel)]="data.time" required id="time" [validateDecimalOnType]='true' decimals='1' value='1' placeholder='Czas' floatLabelType= 'Auto' #time="ngModel"></ejs-numerictextbox>
+                                                    <ejs-datepicker [(ngModel)]="data.date" required id="date" [value]='dateValue' placeholder='Data' name="date" floatLabelType= 'Auto' #date="ngModel"></ejs-datepicker>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
                                                 <div class="e-float-input e-control-wrapper">
-                                                    <ejs-dropdownlist id="type" name="Typ" [(ngModel)]="data.type" [dataSource]='types' [fields]="{text: 'typeName', value: 'typeValue' }" placeholder="Typ" popupHeight='300px' floatLabelType='Auto'></ejs-dropdownlist>
+                                                    <ejs-numerictextbox [(ngModel)]="data.time" required id="time" [validateDecimalOnType]='true' decimals='1' value='1' placeholder='Czas' name="time" floatLabelType= 'Auto' #time="ngModel"></ejs-numerictextbox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="e-float-input e-control-wrapper">
+                                                    <ejs-dropdownlist id="type" name="type" [(ngModel)]="data.type" [dataSource]='types' [fields]="{text: 'typeName', value: 'typeValue' }" placeholder="Typ" popupHeight='300px' floatLabelType='Auto'></ejs-dropdownlist>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row" [hidden]="data.type != 'DOCUMENT'">
+                                            <div class="form-group col-md-12">
+                                                <div class="e-float-input e-control-wrapper">
+                                                    <input [(ngModel)]="data.documentUrl" required id="documentUrl" name="documentUrl" type="text" #documentUrl="ngModel">
+                                                    <span class="e-float-line"></span>
+                                                    <label class="e-float-text e-label-top" for="description">Dokument</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row" [hidden]="data.type != 'PROBLEM'">
+                                            <div class="form-group col-md-12">
+                                                <div class="e-float-input e-control-wrapper">
+                                                    <ejs-dropdownlist id="problemId" name="problemId" [(ngModel)]="data.problemId" [dataSource]='problems' [fields]="{text: 'name', value: 'problemId' }" placeholder="Problem" popupHeight='300px' floatLabelType='Auto'></ejs-dropdownlist>
                                                 </div>
                                             </div>
                                         </div>
@@ -357,7 +378,7 @@
                 <div class="card-content">
                     <div class="e-card-header">
                         <div class="e-card-header-caption">
-                            <div class="e-card-title">Czynności pracowników</div>
+                            <div class="e-card-title">{{ userRole == 'CLIENT' ? 'Czynności do akceptacji' : 'Czynności pracowników' }}</div>
                         </div>
                     </div>
                     <div class="e-card-content" id="content">
