@@ -308,6 +308,7 @@ export class DashboardComponent implements OnInit {
         this, {}, (data, additions, self) => {
           this.ejDialog.hide();
           self.selectedData.state = 'REJECTED';
+          self.selectedData.rejectionReason.reason = this.requestForm.value.reason;
           this.spinner.hide();
         }, (error, errorAction) => {
           this.spinner.hide();

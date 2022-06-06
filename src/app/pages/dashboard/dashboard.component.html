@@ -115,7 +115,7 @@
         <div class="e-card info-card d-flex flex-column" id="basic">
             <div class="d-flex justify-content-between align-items-center" style="padding-bottom: 30px;">
                 <i-bs name="arrow-left" height="30" width="30" (click)="back()"></i-bs>
-                <div class="d-flex justify-content-center" style="padding-left: 50px;" [hidden]="userRole == 'EMPLOYEE' || selectedData.state == 'REJECTED' || (selectedData.state == 'ACCEPTED' && userRole == 'MANAGER')">
+                <div class="justify-content-center" style="padding-left: 50px; display:flex;" [hidden]="userRole == 'EMPLOYEE' || selectedData.state == 'REJECTED' || selectedData.state == 'REJECTED_BY_CLIENT' || selectedData.state == 'ACCEPTED_BY_CLIENT' || (selectedData.state == 'ACCEPTED' && userRole == 'MANAGER')">
                     <button ejs-progressbutton content='Zaakceptuj' class="e-primary"
                         style="background-color: green; padding: 15px" type="submit"
                         (click)="job_accept(selectedData.jobId)"></button>
@@ -147,7 +147,7 @@
                 </div>
                 <div *ngIf="selectedData.state == 'REJECTED'" class="d-flex flex-column align-items-start info-space">
                     <span class="row-name">Powód odrzucenia</span>
-                    <span class="row-value">{{selectedData.rejectionReason}}</span>
+                    <span class="row-value">{{selectedData.rejectionReason.reason}}</span>
                 </div>
                 <div *ngIf="selectedData.date" class="d-flex flex-column align-items-start">
                     <span class="row-name">Data rozpoczęcia</span>
@@ -354,7 +354,7 @@
                                         <div class="form-row" [hidden]="data.type != 'DOCUMENT'">
                                             <div class="form-group col-md-12">
                                                 <div class="e-float-input e-control-wrapper">
-                                                    <input [(ngModel)]="data.documentUrl" required id="documentUrl" name="documentUrl" type="text" #documentUrl="ngModel">
+                                                    <input [(ngModel)]="data.documentUrl" id="documentUrl" name="documentUrl" type="text" #documentUrl="ngModel">
                                                     <span class="e-float-line"></span>
                                                     <label class="e-float-text e-label-top" for="description">Dokument</label>
                                                 </div>

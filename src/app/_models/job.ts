@@ -5,7 +5,7 @@ export class Job {
     time: number;
     date: Date;
     state: string;
-    rejectionReason: string;
+    rejectionReason: any;
     type: string;
     documentUrl: string;
     problem: number;
