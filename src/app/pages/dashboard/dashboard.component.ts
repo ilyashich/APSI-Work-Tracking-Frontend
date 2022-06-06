@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { ActionEventArgs, CommandClickEventArgs, CommandModel, DetailRowService, EditSettingsModel, GridComponent, GridModel, PageEventArgs, PageSettingsModel, valueAccessor, ToolbarItems } from '@syncfusion/ej2-angular-grids';
+import { ActionEventArgs, CommandClickEventArgs, CommandModel, DetailRowService, EditSettingsModel, GridComponent, GridModel, PageEventArgs, PageSettingsModel, valueAccessor, ToolbarItems, Column, IEditCell } from '@syncfusion/ej2-angular-grids';
 import { FilterSettingsModel, IFilter } from '@syncfusion/ej2-angular-grids';
 import { CommonService } from 'src/app/_services/common.service';
 import { ContextProvider } from 'src/app/_services/context.provider';
@@ -12,6 +12,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogComponent } from '@syncfusion/ej2-angular-popups';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/_services/auth-service';
+import { L10n } from '@syncfusion/ej2-base';
+import { Query, DataManager } from '@syncfusion/ej2-data';
+
+L10n.load({
+  'en-US': {
+      grid: {
+          'SaveButton': 'Dodaj',
+          'CancelButton': 'Anuluj'
+      }
+  }
+});
 
 @Component({
     selector: 'app-dashboard',
@@ -27,6 +39,11 @@ export class DashboardComponent implements OnInit {
   public dateFormatter: Function = this.intl.getDateFormat({ type: 'datetime', format: "dd/MM/yyyy HH:mm"}); 
   public data: any[];
   public selectedData: any;
+  public editSettings: EditSettingsModel;
+  public toolbar: ToolbarItems[];
+  public dateParams: IEditCell;
+  public timeParams: IEditCell;
+  public typeParams: IEditCell;
   //------------------------------------------------
   users: User[] = [];
   apiContextsData: {};
@@ -39,26 +56,34 @@ export class DashboardComponent implements OnInit {
   lastProjectId: string;
   lastTaskId: string;
   showDialog: boolean = false;
+  userRole: string;
   //------------------------------------------------
   public commands: CommandModel[];
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('ejDialog') ejDialog: DialogComponent;
+  public dateValue: Date = new Date();
   //------------------------------------------------
   requestForm = new FormGroup({
     reason: new FormControl('', Validators.required),
   });
+
+  public types: object[] = [
+    { typeName: 'Dokument', typeValue: 'DOCUMENT' },
+    { typeName: 'Problem', typeValue: 'PROBLEM' }
+];
 
   constructor(
     private commonService: CommonService,
     private restApiService: RestApiService,
     private contextProvider: ContextProvider,
     private route: ActivatedRoute,
-    private router: Router,
+    private auth: AuthService,
     private spinner: NgxSpinnerService
   ) {
   }
 
   ngOnInit(): void {
+    this.userRole = this.auth.userData.role;
     this.contextProvider.getApiContext().subscribe((apiContext) => {
       this.selectedContext = apiContext;
     });
@@ -75,6 +100,18 @@ export class DashboardComponent implements OnInit {
     };
     this.filter = {
         type: 'CheckBox'
+    };
+    this.editSettings = { allowEditing: false, allowAdding: true, allowDeleting: false, mode: 'Dialog' };
+    this.toolbar = ['Add'];
+    this.timeParams = { params: { decimals: 1, value: 1 } };
+    this.dateParams = { params: {value: new Date() } };
+    this.typeParams = {
+      params: {
+          dataSource: new DataManager(this.types),
+          fields: { text: 'typeName', value: 'typeValue' },
+          query: new Query(),
+          actionComplete: () => false,
+      }
     };
   }
 
@@ -183,9 +220,25 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  actionComplete(args: ActionEventArgs): void {
-    if(JSON.stringify(args.requestType) == '"paging"'){
-      this.pageChangeEvent();
+  actionBegin(args) {
+    if ((args.requestType === 'add')) {
+        for (const cols of this.grid.columns) {
+            if ((cols as Column).field === 'jobId' || (cols as Column).field === 'state' || (cols as Column).field === 'problem' || (cols as Column).field === 'document') {
+                (cols as Column).visible = false;
+            }
+        }
+    }
+  }
+
+  actionComplete(args) {
+    if ((args.requestType === 'add')) {
+        const dialog = args.dialog;
+        dialog.showCloseIcon = false;
+        dialog.height = 600;
+        dialog.width = 400;
+        // change the header of the dialog
+        dialog.header = 'Dodaj czynność';
+        console.log('sdsdsw')
     }
   }
 
@@ -220,7 +273,6 @@ export class DashboardComponent implements OnInit {
 
   onOpenDialog() {
     this.showDialog = true;
-    this.ejDialog.show();
   };
 
   onOverlayClick() {

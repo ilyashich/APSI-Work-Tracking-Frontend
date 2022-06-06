@@ -20,6 +20,9 @@ import { DialogModule } from '@syncfusion/ej2-angular-popups';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from '../angular-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { DatePickerModule, DateTimePickerModule } from '@syncfusion/ej2-angular-calendars';
+import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 
 const icons = {
   HouseFill,
@@ -51,6 +54,9 @@ const icons = {
     FormsModule, ReactiveFormsModule,
     AngularMaterialModule,
     FlexLayoutModule,
+    DatePickerModule,
+    NumericTextBoxModule,
+    DropDownListModule
   ],
   providers: [
     PageService,

@@ -116,8 +116,11 @@
             <div class="d-flex justify-content-between align-items-center" style="padding-bottom: 30px;">
                 <i-bs name="arrow-left" height="30" width="30" (click)="back()"></i-bs>
                 <div class="d-flex justify-content-center" style="padding-left: 50px;">
-                    <button ejs-progressbutton content='Zaakceptuj' class="e-primary" style="background-color: green; padding: 15px" type="submit" (click)="job_accept(selectedData.jobId)"></button>
-                    <button ejs-progressbutton content='Odrzuć' class="e-primary" style="margin-left: 10px; padding: 15px" type="submit" (click)="onOpenDialog()"></button>
+                    <button ejs-progressbutton content='Zaakceptuj' class="e-primary"
+                        style="background-color: green; padding: 15px" type="submit"
+                        (click)="job_accept(selectedData.jobId)"></button>
+                    <button ejs-progressbutton content='Odrzuć' class="e-primary"
+                        style="margin-left: 10px; padding: 15px" type="submit" (click)="onOpenDialog()"></button>
                 </div>
             </div>
             <span class="card-title">{{selectedData.name}}</span>
@@ -139,7 +142,8 @@
             <div class="d-flex flex-row justify-content-start" style="padding-top: 20px;">
                 <div class="d-flex flex-column align-items-start">
                     <span class="row-name">Status</span>
-                    <span class="row-value" [class.green]="selectedData.state == 'ACCEPTED'" [class.red]="selectedData.state == 'REJECTED'">{{selectedData.state}}</span>
+                    <span class="row-value" [class.green]="selectedData.state == 'ACCEPTED'"
+                        [class.red]="selectedData.state == 'REJECTED'">{{selectedData.state}}</span>
                 </div>
                 <div *ngIf="selectedData.state == 'REJECTED'" class="d-flex flex-column align-items-start info-space">
                     <span class="row-name">Powód odrzucenia</span>
@@ -167,21 +171,27 @@
                 </div>
             </div>
         </div>
-        <ejs-dialog *ngIf="showDialog" #template showCloseIcon='true' id='dialog' #ejDialog isModal='true' (overlayClick)="onOverlayClick()" width='400px'>
+        <ejs-dialog *ngIf="showDialog" #template showCloseIcon='true' id='dialog' #ejDialog isModal='true'
+            (close)="onOverlayClick()" (overlayClick)="onOverlayClick()" width='400px'>
             <ng-template #content>
                 <div class="dialogContent">
                     <form class="example-form" [formGroup]="requestForm" id="requestForm">
                         <mat-card-content>
-                          <mat-form-field style="width: -webkit-fill-available">
-                            <input matInput placeholder="Powód odrzucenia" [formControl]="reason" type="text">
-                            <mat-error *ngIf="requestForm.controls['reason'].invalid">
-                              {{getError('reason')}}
-                            </mat-error>
-                          </mat-form-field>
+                            <mat-form-field style="width: -webkit-fill-available">
+                                <input matInput placeholder="Powód odrzucenia" [formControl]="reason" type="text">
+                                <mat-error *ngIf="requestForm.controls['reason'].invalid">
+                                    {{getError('reason')}}
+                                </mat-error>
+                            </mat-form-field>
                         </mat-card-content>
-                        <button ejs-progressbutton content='Wyślij' class="e-primary" type="submit" [disabled]="!requestForm.valid" (click)="job_reject(selectedData.jobId)"></button>
-                      </form>
+                        <button ejs-progressbutton content='Wyślij' class="e-primary" type="submit"
+                            [disabled]="!requestForm.valid" (click)="job_reject(selectedData.jobId)"
+                            visible=false></button>
+                    </form>
                 </div>
+            </ng-template>
+            <ng-template #header>
+                <div title="Odrzuć" class="e-icon-settings dlg-template"> Odrzuć </div>
             </ng-template>
         </ejs-dialog>
     </ng-container>
@@ -270,28 +280,103 @@
             </div>
         </ng-container>
         <ng-container *ngSwitchCase="'jobs'">
-            <div class="card-content">
-                <div class="e-card-header">
-                    <div class="e-card-header-caption">
-                        <div class="e-card-title">Czynności pracowników</div>
+            <ng-container *ngIf="userRole == 'EMPLOYEE'; else standardJobs">
+                <div class="card-content">
+                    <div class="e-card-header">
+                        <div class="e-card-header-caption">
+                            <div class="e-card-title">Moje czynności</div>
+                        </div>
+                    </div>
+                    <div class="e-card-content" id="content">
+                        <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true"
+                            [allowFiltering]="true" [filterSettings]='filterOptions' [pageSettings]='pageSettings'
+                            (actionComplete)='actionComplete($event)' (recordDoubleClick)="recordClick($event)"
+                            [editSettings]='editSettings' [toolbar]='toolbar' (actionBegin)="actionBegin($event)">
+                            <e-columns>
+                                <e-column field='jobId' headerText='ID' textAlign='Left' width=60></e-column>
+                                <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
+                                <e-column field='description' headerText='Opis' textAlign='Left' width=150></e-column>
+                                <e-column field='date' headerText='Data' textAlign='Left' width=80 editType= 'datepickeredit' [edit]='dateParams'></e-column>
+                                <e-column field='time' headerText='Czas wykonania' textAlign='Left' width=60 editType= 'numericedit' [edit]='timeParams'></e-column>
+                                <e-column field='state' headerText='Status' textAlign='Left' width=80></e-column>
+                                <e-column field='type' headerText='Typ' textAlign='Left' width=80 editType= 'dropdownedit'
+                                [edit]='typeParams'></e-column>
+                                <e-column field='problem' headerText='Problem' textAlign='Left' width=80></e-column>
+                                <e-column field='documentUrl' headerText='Dokument' textAlign='Left' width=80></e-column>
+                            </e-columns>
+                            <ng-template #editSettingsTemplate let-data>
+                                <div ngForm #jobForm="ngForm">
+                                    <div id="tab" class='tab'>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="e-float-input e-control-wrapper">
+                                                    <input [(ngModel)]="data.name" required id="name" name="Nazwa" type="text" #name="ngModel">
+                                                    <span class="e-float-line"></span>
+                                                    <label class="e-float-text e-label-top" for="name">Nazwa</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="e-float-input e-control-wrapper">
+                                                    <input [(ngModel)]="data.description" required id="description" name="Opis" type="text" #description="ngModel">
+                                                    <span class="e-float-line"></span>
+                                                    <label class="e-float-text e-label-top" for="description">Opis</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="e-float-input e-control-wrapper">
+                                                    <ejs-datepicker [(ngModel)]="data.date" required id="date" [value]='dateValue' placeholder='Data' floatLabelType= 'Auto' #date="ngModel"></ejs-datepicker>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="e-float-input e-control-wrapper">
+                                                    <ejs-numerictextbox [(ngModel)]="data.time" required id="time" [validateDecimalOnType]='true' decimals='1' value='1' placeholder='Czas' floatLabelType= 'Auto' #time="ngModel"></ejs-numerictextbox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="e-float-input e-control-wrapper">
+                                                    <ejs-dropdownlist id="type" name="Typ" [(ngModel)]="data.type" [dataSource]='types' [fields]="{text: 'typeName', value: 'typeValue' }" placeholder="Typ" popupHeight='300px' floatLabelType='Auto'></ejs-dropdownlist>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ejs-grid>
                     </div>
                 </div>
-                <div class="e-card-content" id="content">
-                    <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true"
-                        [allowFiltering]="true" [filterSettings]='filterOptions' [pageSettings]='pageSettings'
-                        (actionComplete)='actionComplete($event)' (recordDoubleClick)="recordClick($event)">
-                        <e-columns>
-                            <e-column field='jobId' headerText='ID' textAlign='Left' width=60></e-column>
-                            <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
-                            <e-column field='description' headerText='Opis' textAlign='Left' width=150></e-column>
-                            <e-column field='date' headerText='Data' textAlign='Left' width=80></e-column>
-                            <e-column field='time' headerText='Czas wykonania' textAlign='Left' width=60></e-column>
-                            <e-column field='state' headerText='Status' textAlign='Left' width=80></e-column>
-                            <e-column field='type' headerText='Typ' textAlign='Left' width=80></e-column>
-                        </e-columns>
-                    </ejs-grid>
+            </ng-container>
+            <ng-template #standardJobs>
+                <div class="card-content">
+                    <div class="e-card-header">
+                        <div class="e-card-header-caption">
+                            <div class="e-card-title">Czynności pracowników</div>
+                        </div>
+                    </div>
+                    <div class="e-card-content" id="content">
+                        <ejs-grid #grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true"
+                            [allowFiltering]="true" [filterSettings]='filterOptions' [pageSettings]='pageSettings'
+                            (actionComplete)='actionComplete($event)' (recordDoubleClick)="recordClick($event)">
+                            <e-columns>
+                                <e-column field='jobId' headerText='ID' textAlign='Left' width=60></e-column>
+                                <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
+                                <e-column field='description' headerText='Opis' textAlign='Left' width=150></e-column>
+                                <e-column field='date' headerText='Data' textAlign='Left' width=80></e-column>
+                                <e-column field='time' headerText='Czas wykonania' textAlign='Left' width=60></e-column>
+                                <e-column field='state' headerText='Status' textAlign='Left' width=80></e-column>
+                                <e-column field='type' headerText='Typ' textAlign='Left' width=80></e-column>
+                            </e-columns>
+                        </ejs-grid>
+                    </div>
                 </div>
-            </div>
+            </ng-template>
         </ng-container>
         <ng-container *ngSwitchCase="'problems'">
             <div class="card-content">
