@@ -253,7 +253,7 @@ export class DashboardComponent implements OnInit {
           'problemId': this.jobForm.value.problemId ? this.jobForm.value.problemId : null
         },
         'documentUrl': this.jobForm.value.documentUrl ? this.jobForm.value.documentUrl : null,
-        'employee': {
+        'user': {
           'id': this.auth.userData.id
         },
         'task': {
