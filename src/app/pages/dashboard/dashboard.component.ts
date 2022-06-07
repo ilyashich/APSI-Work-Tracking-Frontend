@@ -17,6 +17,7 @@ import { L10n } from '@syncfusion/ej2-base';
 import { Query, DataManager } from '@syncfusion/ej2-data';
 import { Problem } from 'src/app/_models/problem';
 import { Task } from 'src/app/_models/task';
+import { formatDate } from '@angular/common';
 
 L10n.load({
   'en-US': {
@@ -144,6 +145,9 @@ export class DashboardComponent implements OnInit {
         this.commonService.handleIncommingApiData(this.restApiService.get_details(this.id, this.lastProjectId, this.lastTaskId),
           this, {}, (data, additions, self) => {
             self.selectedData = data;
+            if (self.selectedData.date) {
+              self.selectedData.date = formatDate(self.selectedData.date, 'dd/MM/yyyy', 'en-US');
+            }
             if (this.id == 'project_details') {
               self.data = data.tasks;
             }
@@ -308,7 +312,7 @@ export class DashboardComponent implements OnInit {
         this, {}, (data, additions, self) => {
           this.ejDialog.hide();
           self.selectedData.state = 'REJECTED';
-          self.selectedData.rejectionReason.reason = this.requestForm.value.reason;
+          self.selectedData.rejectionReason = this.requestForm.value.reason;
           this.spinner.hide();
         }, (error, errorAction) => {
           this.spinner.hide();
