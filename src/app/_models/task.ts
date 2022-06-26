@@ -5,4 +5,5 @@ export class Task {
     name: string;
     description: string;
     jobs: Job[];
+    time: number;
 }
