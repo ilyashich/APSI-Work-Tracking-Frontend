@@ -17,7 +17,11 @@ import { L10n } from '@syncfusion/ej2-base';
 import { Query, DataManager } from '@syncfusion/ej2-data';
 import { Problem } from 'src/app/_models/problem';
 import { Task } from 'src/app/_models/task';
+import { Project } from 'src/app/_models/project';
 import { formatDate } from '@angular/common';
+import { registerLocaleData } from '@angular/common';
+import localePl from "@angular/common/locales/pl";
+registerLocaleData(localePl, "pl");
 
 L10n.load({
   'en-US': {
@@ -68,12 +72,14 @@ export class DashboardComponent implements OnInit {
   public dateValue: Date = new Date();
   public problems: Problem[];
   public tasks: Task[];
+  public projects: Project[];
   //------------------------------------------------
   requestForm = new FormGroup({
     reason: new FormControl('', Validators.required),
   });
 
   public types: object[] = [
+    { typeName: '', typeValue: null },
     { typeName: 'Dokument', typeValue: 'DOCUMENT' },
     { typeName: 'Problem', typeValue: 'PROBLEM' }
 ];
@@ -135,6 +141,14 @@ export class DashboardComponent implements OnInit {
           // empty
         });
     });
+    this.contextProvider.getApiContext().subscribe((apiContext) => {
+      this.commonService.handleIncommingApiData(this.restApiService.get_data('projects'),
+        this, {}, (data, additions, self) => {
+          self.projects = data;
+        }, (error, errorAction) => {
+          // empty
+        });
+    });
   }
 
   _getData() {
@@ -146,7 +160,7 @@ export class DashboardComponent implements OnInit {
           this, {}, (data, additions, self) => {
             self.selectedData = data;
             if (self.selectedData.date) {
-              self.selectedData.date = formatDate(self.selectedData.date, 'dd/MM/yyyy', 'en-US');
+              self.selectedData.date = formatDate(self.selectedData.date, 'dd/MM/yyyy HH:mm', 'pl');
             }
             if (this.id == 'project_details') {
               self.data = data.tasks;
