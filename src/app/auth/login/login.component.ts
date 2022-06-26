@@ -30,11 +30,11 @@ export class LoginComponent implements OnInit {
           fetchTokenWithTimeout.then(
             result => {
               switch (this.auth.userData.role) {
-                case 'EMPLOYEE':
+                case 'USER':
                   this.router.navigate(['pages/dashboard', 'projects']);
                   break;
 
-                case 'MANAGER':
+                case 'ADMIN':
                   this.router.navigate(['pages/dashboard', 'employees']);
                   break;
 

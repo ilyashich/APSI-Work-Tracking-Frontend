@@ -31,18 +31,18 @@ export class RestApiService {
         return this.do_GET(this.baseUrl + '/persons');
 
       case 'projects':
-        if (this.authService.userData.role == 'MANAGER') {
+        if (this.authService.userData.role == 'ADMIN') {
           return this.do_GET(this.baseUrl + '/project/all');
         }
-        if (this.authService.userData.role == 'EMPLOYEE') {
+        if (this.authService.userData.role == 'USER') {
           return this.do_GET(this.baseUrl + '/person/' + this.authService.userData.username + '/projects');
         }
 
       case 'jobs':
-        if (this.authService.userData.role == 'MANAGER') {
+        if (this.authService.userData.role == 'ADMIN') {
           return this.do_GET(this.baseUrl + '/job/all_to_accept');
         }
-        if (this.authService.userData.role == 'EMPLOYEE') {
+        if (this.authService.userData.role == 'USER') {
           return this.do_GET(this.baseUrl + '/user/' + this.authService.userData.username + '/jobs');
         }
         if (this.authService.userData.role == 'CLIENT') {

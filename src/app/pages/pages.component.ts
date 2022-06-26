@@ -23,7 +23,7 @@ export class PagesComponent implements OnInit {
 
     constructor(private router: Router, private authService: AuthService) {
       switch (this.authService.userData ? this.authService.userData.role : '') {
-        case 'EMPLOYEE':
+        case 'USER':
           this.menuList = [
             {
               name: 'Moje projekty', 
@@ -40,7 +40,7 @@ export class PagesComponent implements OnInit {
           ]
           break;
 
-        case 'MANAGER':
+        case 'ADMIN':
           this.menuList = [
             {
               name: 'Pracownicy', 
