@@ -54,6 +54,9 @@ export class RestApiService {
 
       case 'tasks':
         return this.do_GET(this.baseUrl + '/user/' + this.authService.userData.username + '/tasks');
+
+      case 'calendar':
+        return this.do_GET(this.baseUrl + '/user/' + this.authService.userData.username + '/calendar/jobs');
     }
   }
 

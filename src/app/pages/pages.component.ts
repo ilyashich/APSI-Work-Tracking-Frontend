@@ -36,6 +36,12 @@ export class PagesComponent implements OnInit {
               icon: 'list-task',
               url: '/pages/dashboard',
               id: 'jobs'
+            },
+            {
+              name: 'Kalendarz', 
+              icon: 'list-task',
+              url: '/pages/dashboard',
+              id: 'calendar'
             }
           ]
           break;

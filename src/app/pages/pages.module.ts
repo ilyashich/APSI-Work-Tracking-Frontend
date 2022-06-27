@@ -23,6 +23,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { DatePickerModule, DateTimePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { ScheduleModule } from '@syncfusion/ej2-angular-schedule';
 
 const icons = {
   HouseFill,
@@ -56,7 +57,8 @@ const icons = {
     FlexLayoutModule,
     DatePickerModule,
     NumericTextBoxModule,
-    DropDownListModule
+    DropDownListModule,
+    ScheduleModule
   ],
   providers: [
     PageService,

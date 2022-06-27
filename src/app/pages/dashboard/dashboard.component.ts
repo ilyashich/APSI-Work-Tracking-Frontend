@@ -21,6 +21,8 @@ import { Project } from 'src/app/_models/project';
 import { formatDate } from '@angular/common';
 import { registerLocaleData } from '@angular/common';
 import localePl from "@angular/common/locales/pl";
+import { EventSettingsModel, DayService, WeekService, WorkWeekService, MonthService, AgendaService } from '@syncfusion/ej2-angular-schedule';
+import { CalendarJob } from 'src/app/_models/calendar_job';
 registerLocaleData(localePl, "pl");
 
 L10n.load({
@@ -34,6 +36,7 @@ L10n.load({
 
 @Component({
     selector: 'app-dashboard',
+    providers: [DayService, WeekService, WorkWeekService, MonthService, AgendaService],
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss']
   })
@@ -72,11 +75,12 @@ export class DashboardComponent implements OnInit {
   public dateValue: Date = new Date();
   public problems: Problem[];
   public tasks: Task[];
-  public projects: Project[];
+  public calendarJobs: CalendarJob[];
   //------------------------------------------------
   requestForm = new FormGroup({
     reason: new FormControl('', Validators.required),
   });
+  public eventSettings: EventSettingsModel;
 
   public types: object[] = [
     { typeName: '', typeValue: null },
@@ -142,13 +146,14 @@ export class DashboardComponent implements OnInit {
         });
     });
     this.contextProvider.getApiContext().subscribe((apiContext) => {
-      this.commonService.handleIncommingApiData(this.restApiService.get_data('projects'),
+      this.commonService.handleIncommingApiData(this.restApiService.get_data('calendar'),
         this, {}, (data, additions, self) => {
-          self.projects = data;
+          self.calendarJobs = data;
         }, (error, errorAction) => {
           // empty
         });
     });
+    this.eventSettings = { dataSource: this.calendarJobs };
   }
 
   _getData() {
