@@ -73,6 +73,10 @@ export class DashboardComponent implements OnInit {
   @ViewChild('ejDialog') ejDialog: DialogComponent;
   @ViewChild('jobForm') jobForm: FormGroup;
   public dateValue: Date = new Date();
+  public currentYear: number = this.dateValue.getFullYear();
+  public currentMonth: number = this.dateValue.getMonth();
+  public minDate: Object = new Date(this.currentYear, this.currentMonth, 1);
+  public maxDate: Object =  new Date(this.currentYear, this.currentMonth+1, 7);
   public problems: Problem[];
   public tasks: Task[];
   public calendarJobs: CalendarJob[];

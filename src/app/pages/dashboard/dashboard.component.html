@@ -314,6 +314,13 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
                                                 <div class="e-float-input e-control-wrapper">
+                                                    <ejs-datepicker [(ngModel)]="data.date" required id="date" [value]='dateValue' placeholder='Data' name="date" #date="ngModel" [min]='minDate' [max]='maxDate'></ejs-datepicker>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="e-float-input e-control-wrapper">
                                                     <input [(ngModel)]="data.name" required id="name" name="name" type="text" #name="ngModel">
                                                     <span class="e-float-line"></span>
                                                     <label class="e-float-text e-label-top" for="name">Nazwa</label>
@@ -324,13 +331,6 @@
                                             <div class="form-group col-md-12">
                                                 <div class="e-float-input e-control-wrapper">
                                                     <ejs-dropdownlist id="task" name="task" [(ngModel)]="data.task" [dataSource]='tasks' [fields]="{text: 'name', value: 'taskId' }" placeholder="Zadanie" popupHeight='300px' floatLabelType='Auto'></ejs-dropdownlist>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-12">
-                                                <div class="e-float-input e-control-wrapper">
-                                                    <ejs-datepicker [(ngModel)]="data.date" required id="date" [value]='dateValue' placeholder='Data' name="date" floatLabelType= 'Auto' #date="ngModel"></ejs-datepicker>
                                                 </div>
                                             </div>
                                         </div>

@@ -24,6 +24,7 @@ import { DatePickerModule, DateTimePickerModule } from '@syncfusion/ej2-angular-
 import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { ScheduleModule } from '@syncfusion/ej2-angular-schedule';
+import { EventSettingsModel, DayService, WeekService, WorkWeekService, MonthService, AgendaService } from '@syncfusion/ej2-angular-schedule';
 
 const icons = {
   HouseFill,
@@ -67,7 +68,8 @@ const icons = {
     GroupService,
     VirtualizationService,
     CommonService, RestApiService, ContextProvider,
-    EditService, CommandColumnService, ToolbarService
+    EditService, CommandColumnService, ToolbarService,
+    DayService, WeekService, WorkWeekService, MonthService, AgendaService
   ]
 })
 export class PagesModule { }
