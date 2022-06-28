@@ -313,7 +313,10 @@ export class DashboardComponent implements OnInit {
   }
 
   customDate(date: any) {
-    var test = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay() + ' ' + date.getHours() + ':' + date.getMinutes();
+    var test1 = date.getUTCDay();
+    var test2 = date.getUTCMonth();
+    var test23 = date.getDate();
+    var test = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay() + ' 00:00';
     return test;
   }
 
@@ -335,7 +338,6 @@ export class DashboardComponent implements OnInit {
           'taskId': this.jobForm.value.task,
         }
       };
-      console.log(req)
       this.spinner.show();
       this.contextProvider.getApiContext().subscribe((apiContext) => {
         this.commonService.handleIncommingApiData(this.restApiService.job_create(req),

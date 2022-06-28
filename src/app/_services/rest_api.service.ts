@@ -70,12 +70,8 @@ export class RestApiService {
   }
 
   getPdf() {
-
-    const httpOptions = {
-      responseType: 'blob' as 'json'
-    };
   
-    return this.http.get(this.baseUrl + '/invoice/get', httpOptions);
+    return this.http.get(this.baseUrl + '/invoice/get');
   }
 
   get_details(id: string, lastProjectId: string, lastTaskId: string) {
@@ -90,7 +86,7 @@ export class RestApiService {
 
   job_accept(id: string) {
     switch (this.authService.userData.role) {
-      case 'MANAGER':
+      case 'USER':
         return this.do_PUT(this.baseUrl + '/user/' + this.authService.userData.username  + '/job_to_accept/' + id, null); 
 
       case 'CLIENT':
@@ -104,7 +100,7 @@ export class RestApiService {
     };
 
     switch (this.authService.userData.role) {
-      case 'MANAGER':
+      case 'USER':
         return this.do_PUT(this.baseUrl + '/user/' + this.authService.userData.username  + '/job_to_reject/' + id, req); 
 
       case 'CLIENT':
