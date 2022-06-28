@@ -68,6 +68,7 @@ export class DashboardComponent implements OnInit {
   lastTaskId: string;
   showDialog: boolean = false;
   userRole: string;
+  projectRole: string = 'USER';
   //------------------------------------------------
   public commands: CommandModel[];
   @ViewChild('grid') public grid: GridComponent;
@@ -268,12 +269,17 @@ export class DashboardComponent implements OnInit {
     this._getData();
   }
 
-  recordClick(e: any) {
+  recordClick(e: any, manager?: boolean) {
     this.selectedData = e.rowData;
     this.showDetails = true;
     this.data = null;
     switch (this.id) {
       case 'projects':
+        if (manager != null) {
+          this.projectRole = 'MANAGER'
+        } else {
+          this.projectRole = 'USER'
+        }
         this.data = this.selectedData.tasks;
         this.lastProjectId = this.selectedData.projectId;
         this.id = 'project_details';
@@ -299,6 +305,7 @@ export class DashboardComponent implements OnInit {
         break;
 
       case 'jobs':
+        this.projectRole = 'USER'
         this.id = 'job_details';
         this.jobsFromProjects = false;
         break;
@@ -315,10 +322,9 @@ export class DashboardComponent implements OnInit {
     if ((args.requestType === 'save')) {
       var req = {
         'name': this.jobForm.value.name,
-        'description': this.jobForm.value.description,
         'time': this.jobForm.value.time,
         'date': this.customDate(String(this.jobForm.value.date)),
-        'type': this.jobForm.value.type,
+        'type': this.jobForm.value.type ? this.jobForm.value.type : null,
         'problem': {
           'problemId': this.jobForm.value.problemId ? this.jobForm.value.problemId : null
         },
