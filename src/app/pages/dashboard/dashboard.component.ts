@@ -77,6 +77,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('ejDialog') ejDialog: DialogComponent;
   @ViewChild('jobForm') jobForm: FormGroup;
   @ViewChild('projectForm') projectForm: FormGroup;
+  @ViewChild('taskForm') taskForm: FormGroup;
   public dateValue: Date = new Date();
   public currentYear: number = this.dateValue.getFullYear();
   public currentMonth: number = this.dateValue.getMonth();
@@ -410,6 +411,7 @@ public roles: object[] = [
           break;
 
         case 'project_details':
+          console.log(this.taskForm.value);
           break;
       }
       
