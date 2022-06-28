@@ -415,9 +415,9 @@
             <ng-template #standardJobs>
                 <div class="card-content">
                     <div class="e-card-header">
-                        <div class="e-card-header-caption">
+                        <div class="e-card-header-caption d-flex justify-content-between align-items-center">
                             <div class="e-card-title">{{ userRole == 'CLIENT' ? 'Czynności do akceptacji' : 'Czynności pracowników' }}</div>
-                            <button ejs-progressbutton content='Pobierz fakturę' class="e-primary" (click)="downloadInvoice()"></button>
+                            <button *ngIf="userRole == 'CLIENT'" ejs-progressbutton content='Pobierz fakturę' class="e-primary" (click)="downloadInvoice()"></button>
                         </div>
                     </div>
                     <div class="e-card-content" id="content">

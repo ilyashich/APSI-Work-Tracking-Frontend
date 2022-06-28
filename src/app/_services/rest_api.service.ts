@@ -70,8 +70,7 @@ export class RestApiService {
   }
 
   getPdf() {
-  
-    return this.http.get(this.baseUrl + '/invoice/get');
+    return this.do_GET(this.baseUrl + '/invoice/get');
   }
 
   get_details(id: string, lastProjectId: string, lastTaskId: string) {
