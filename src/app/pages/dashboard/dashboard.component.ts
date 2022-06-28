@@ -52,6 +52,8 @@ export class DashboardComponent implements OnInit {
   public selectedData: any;
   public editSettings: EditSettingsModel;
   public toolbar: ToolbarItems[];
+  public editSettings2: EditSettingsModel;
+  public toolbar2: ToolbarItems[];
   public dateParams: IEditCell;
   public timeParams: IEditCell;
   public typeParams: IEditCell;
@@ -74,6 +76,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('grid') public grid: GridComponent;
   @ViewChild('ejDialog') ejDialog: DialogComponent;
   @ViewChild('jobForm') jobForm: FormGroup;
+  @ViewChild('projectForm') projectForm: FormGroup;
   public dateValue: Date = new Date();
   public currentYear: number = this.dateValue.getFullYear();
   public currentMonth: number = this.dateValue.getMonth();
@@ -82,6 +85,7 @@ export class DashboardComponent implements OnInit {
   public problems: Problem[];
   public tasks: Task[];
   public calendarJobs: CalendarJob[];
+  public userParams: IEditCell;
   //------------------------------------------------
   requestForm = new FormGroup({
     reason: new FormControl('', Validators.required),
@@ -125,6 +129,8 @@ export class DashboardComponent implements OnInit {
     };
     this.editSettings = { allowEditing: false, allowAdding: true, allowDeleting: false, mode: 'Dialog' };
     this.toolbar = ['Add'];
+    this.editSettings2 = { allowEditing: true, allowAdding: true, allowDeleting: true };
+    this.toolbar2 = ['Add', 'Edit', 'Delete'];
     this.timeParams = { params: { decimals: 1, value: 1 } };
     this.dateParams = { params: {value: new Date() } };
     this.typeParams = {
@@ -139,6 +145,22 @@ export class DashboardComponent implements OnInit {
       this.commonService.handleIncommingApiData(this.restApiService.get_data('problems'),
         this, {}, (data, additions, self) => {
           self.problems = data;
+        }, (error, errorAction) => {
+          // empty
+        });
+    });
+    this.contextProvider.getApiContext().subscribe((apiContext) => {
+      this.commonService.handleIncommingApiData(this.restApiService.get_data('employees'),
+        this, {}, (data, additions, self) => {
+          self.users = data;
+          self.userParams = {
+            params:   {
+                dataSource: self.users,
+                fields: {text:'name',value:'id'},
+                query: new Query(),
+                actionComplete: () => false
+                }
+            }
         }, (error, errorAction) => {
           // empty
         });
@@ -225,7 +247,17 @@ export class DashboardComponent implements OnInit {
         this.contextProvider.getApiContext().subscribe((apiContext) => {
           this.commonService.handleIncommingApiData(this.restApiService.get_data(this.id),
             this, {}, (data, additions, self) => {
-              self.data = data;
+              if (this.id == 'calendar') {
+                self.calendarJobs = [];
+                data.forEach(x => {
+                  if (x['startDate'] != null) {
+                    self.calendarJobs.push(new CalendarJob(x['jobId'], x['name'], x['time'], this.splitDate(x['startDate']), this.splitDate(x['endDate'])));
+                  }
+                });
+                self.eventSettings = { dataSource: self.calendarJobs };
+              } else {
+                self.data = data;
+              }
               this.spinner.hide();
             }, (error, errorAction) => {
               this.spinner.hide();
@@ -358,6 +390,7 @@ export class DashboardComponent implements OnInit {
           break;
 
         case 'projects':
+          console.log(this.projectForm.value);
           break;
 
         case 'project_details':

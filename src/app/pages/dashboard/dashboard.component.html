@@ -26,6 +26,10 @@
                     <span class="row-name">Rola</span>
                     <span class="row-value">{{selectedData.role}}</span>
                 </div>
+                <div class="d-flex flex-column align-items-start info-space">
+                    <span class="row-name">Stawka/h</span>
+                    <span class="row-value">{{selectedData.rate}}</span>
+                </div>
             </div>
         </div>
     </ng-container>
@@ -239,6 +243,7 @@
                             <e-column field='surname' headerText='Naziwsko' textAlign='Left' width=150></e-column>
                             <e-column field='username' headerText='Login' textAlign='Left' width=100></e-column>
                             <e-column field='role' headerText='Rola' textAlign='Left' width=80></e-column>
+                            <e-column field='rate' headerText='Stawka/h' textAlign='Left' width=80></e-column>
                         </e-columns>
                     </ejs-grid>
                 </div>
@@ -300,6 +305,40 @@
                                 <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
                                 <e-column field='description' headerText='Opis' textAlign='Left' width=200></e-column>
                             </e-columns>
+                            <ng-template #editSettingsTemplate let-data>
+                                <div ngForm #projectForm="ngForm">
+                                    <div id="tab" class='tab'>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="e-float-input e-control-wrapper">
+                                                    <input [(ngModel)]="data.name" required id="name" name="name" type="text" #name="ngModel">
+                                                    <span class="e-float-line"></span>
+                                                    <label class="e-float-text e-label-top" for="name">Nazwa</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="e-float-input e-control-wrapper">
+                                                    <input [(ngModel)]="data.description" required id="description" name="description" type="text" #name="ngModel">
+                                                    <span class="e-float-line"></span>
+                                                    <label class="e-float-text e-label-top" for="description">Opis</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ejs-grid #grid allowPaging]="true" [allowSorting]="true" id="users" name="users" [(ngModel)]="data.users"
+                                            [allowFiltering]="true" [filterSettings]='filterOptions' [pageSettings]='pageSettings'
+                                            (actionComplete)='actionComplete($event)' [editSettings]='editSettings2' [toolbar]='toolbar2'>
+                                            <e-columns>
+                                                <e-column field='userId' headerText='Pracownik' textAlign='Left' width=10 editType= 'dropdownedit' [edit]='userParams'></e-column>
+                                                <e-column field='role' headerText='Rola' textAlign='Left' width=100></e-column>
+                                                <e-column field='startDate' headerText='Początek przypisania' textAlign='Left' width=100></e-column>
+                                                <e-column field='endDate' headerText='Koniec przypisania' textAlign='Left' width=100></e-column>
+                                            </e-columns>
+                                        </ejs-grid>
+                                    </div>
+                                </div>
+                            </ng-template>
                         </ejs-grid>
                     </div>
                 </div>

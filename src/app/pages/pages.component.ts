@@ -61,12 +61,6 @@ export class PagesComponent implements OnInit {
               id: 'projects'
             },
             {
-              name: 'Czynności do akceptacji', 
-              icon: 'list-check',
-              url: '/pages/dashboard',
-              id: 'jobs'
-            },
-            {
               name: 'Repozytorium problemów', 
               icon: 'exclamation-circle-fill',
               url: '/pages/dashboard',
