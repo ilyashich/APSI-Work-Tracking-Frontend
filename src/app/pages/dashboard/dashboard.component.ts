@@ -74,6 +74,7 @@ export class DashboardComponent implements OnInit {
   //------------------------------------------------
   public commands: CommandModel[];
   @ViewChild('grid') public grid: GridComponent;
+  @ViewChild('gridTest') public gridTest: GridComponent;
   @ViewChild('ejDialog') ejDialog: DialogComponent;
   @ViewChild('jobForm') jobForm: FormGroup;
   @ViewChild('projectForm') projectForm: FormGroup;
@@ -137,8 +138,8 @@ public roles: object[] = [
     };
     this.editSettings = { allowEditing: false, allowAdding: true, allowDeleting: false, mode: 'Dialog' };
     this.toolbar = ['Add'];
-    this.editSettings2 = { allowEditing: true, allowAdding: true, allowDeleting: true };
-    this.toolbar2 = ['Add', 'Edit', 'Delete'];
+    this.editSettings2 = { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Normal' };
+    this.toolbar2 = ['Add', 'Edit', 'Delete', 'Update', 'Cancel'];
     this.timeParams = { params: { decimals: 1, value: 1 } };
     this.dateParams = { params: {value: new Date() } };
     this.typeParams = {
@@ -408,10 +409,25 @@ public roles: object[] = [
 
         case 'projects':
           console.log(this.projectForm.value);
+          console.log(this.gridTest);
           break;
 
         case 'project_details':
           console.log(this.taskForm.value);
+          var req = {};
+          req['name'] = this.taskForm.value.name;
+          req['description'] = this.taskForm.value.description;
+          this.spinner.show();
+          this.contextProvider.getApiContext().subscribe((apiContext) => {
+            this.commonService.handleIncommingApiData(this.restApiService.task_create(req, this.lastProjectId),
+              this, {}, (data, additions, self) => {
+                this._getData();
+                this.spinner.hide();
+              }, (error, errorAction) => {
+                this.spinner.hide();
+                // empty
+              });
+          });
           break;
       }
       
