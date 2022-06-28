@@ -157,7 +157,7 @@ export class DashboardComponent implements OnInit {
           self.calendarJobs = [];
           data.forEach(x => {
             if (x['startDate'] != null) {
-              self.calendarJobs.push(new CalendarJob(x['jobId'], x['name'], this.splitDate(x['startDate']), this.splitDate(x['endDate'])));
+              self.calendarJobs.push(new CalendarJob(x['jobId'], x['name'], x['time'], this.splitDate(x['startDate']), this.splitDate(x['endDate'])));
             }
           });
           self.eventSettings = { dataSource: self.calendarJobs };
@@ -323,21 +323,26 @@ export class DashboardComponent implements OnInit {
     if ((args.requestType === 'save')) {
       switch (this.id) {
         case 'jobs':
-          var req = {
-            'name': this.jobForm.value.name,
-            'time': this.jobForm.value.time,
-            'date': this.customDate(this.jobForm.value.date),
-            'type': this.jobForm.value.type ? this.jobForm.value.type : null,
-            'problem': {
-              'problemId': this.jobForm.value.problemId ? this.jobForm.value.problemId : null
-            },
-            'documentUrl': this.jobForm.value.documentUrl ? this.jobForm.value.documentUrl : null,
-            'user': {
-              'id': this.auth.userData.id
-            },
-            'task': {
-              'taskId': this.jobForm.value.task,
+          var req = {};
+          req['name'] = this.jobForm.value.name;
+          req['time'] = this.jobForm.value.time;
+          req['date'] = this.customDate(this.jobForm.value.date);
+          if (this.jobForm.value.type != null) {
+            req['type'] = this.jobForm.value.type;
+            if (this.jobForm.value.problemId != null) {
+              req['problem'] = {
+                'problemId': this.jobForm.value.problemId
+              };
             }
+            if (this.jobForm.value.documentUrl != null) {
+              req['documentUrl'] = this.jobForm.value.documentUrl;
+            }
+          }
+          req['user'] = {
+            'id': this.auth.userData.id
+          };
+          req['task'] = {
+            'taskId': this.jobForm.value.task
           };
           this.spinner.show();
           this.contextProvider.getApiContext().subscribe((apiContext) => {
@@ -418,7 +423,7 @@ export class DashboardComponent implements OnInit {
   downloadInvoice() {
     this.restApiService.getPdf().subscribe((data) => {
 
-      var downloadURL = window.URL.createObjectURL(new Blob([data], {type: 'application/pdf'}));
+      var downloadURL = window.URL.createObjectURL(new Blob([data['item']], {type: 'application/pdf'}));
       var link = document.createElement('a');
       link.href = downloadURL;
       link.download = "help.pdf";
