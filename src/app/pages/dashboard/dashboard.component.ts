@@ -314,39 +314,51 @@ export class DashboardComponent implements OnInit {
 
   customDate(date: any) {
     var month = Number(date.getMonth());
-    var test = date.getFullYear() + '-' + month+1 + '-' + date.getDate() + ' 00:00';
+    month = month+1;
+    var test = date.getFullYear() + '-' + month + '-' + date.getDate() + ' 00:00';
     return test;
   }
 
   actionBegin(args) {
     if ((args.requestType === 'save')) {
-      var req = {
-        'name': this.jobForm.value.name,
-        'time': this.jobForm.value.time,
-        'date': this.customDate(this.jobForm.value.date),
-        'type': this.jobForm.value.type ? this.jobForm.value.type : null,
-        'problem': {
-          'problemId': this.jobForm.value.problemId ? this.jobForm.value.problemId : null
-        },
-        'documentUrl': this.jobForm.value.documentUrl ? this.jobForm.value.documentUrl : null,
-        'user': {
-          'id': this.auth.userData.id
-        },
-        'task': {
-          'taskId': this.jobForm.value.task,
-        }
-      };
-      this.spinner.show();
-      this.contextProvider.getApiContext().subscribe((apiContext) => {
-        this.commonService.handleIncommingApiData(this.restApiService.job_create(req),
-          this, {}, (data, additions, self) => {
-            this._getData();
-            this.spinner.hide();
-          }, (error, errorAction) => {
-            this.spinner.hide();
-            // empty
+      switch (this.id) {
+        case 'jobs':
+          var req = {
+            'name': this.jobForm.value.name,
+            'time': this.jobForm.value.time,
+            'date': this.customDate(this.jobForm.value.date),
+            'type': this.jobForm.value.type ? this.jobForm.value.type : null,
+            'problem': {
+              'problemId': this.jobForm.value.problemId ? this.jobForm.value.problemId : null
+            },
+            'documentUrl': this.jobForm.value.documentUrl ? this.jobForm.value.documentUrl : null,
+            'user': {
+              'id': this.auth.userData.id
+            },
+            'task': {
+              'taskId': this.jobForm.value.task,
+            }
+          };
+          this.spinner.show();
+          this.contextProvider.getApiContext().subscribe((apiContext) => {
+            this.commonService.handleIncommingApiData(this.restApiService.job_create(req),
+              this, {}, (data, additions, self) => {
+                this._getData();
+                this.spinner.hide();
+              }, (error, errorAction) => {
+                this.spinner.hide();
+                // empty
+              });
           });
-      });
+          break;
+
+        case 'projects':
+          break;
+
+        case 'project_details':
+          break;
+      }
+      
     }
   }
 
@@ -357,8 +369,19 @@ export class DashboardComponent implements OnInit {
         dialog.height = 600;
         dialog.width = 400;
         // change the header of the dialog
-        dialog.header = 'Dodaj czynność';
-        console.log('sdsdsw')
+        switch (this.id) {
+          case 'jobs':
+            dialog.header = 'Dodaj czynność';
+            break;
+
+          case 'projects':
+            dialog.header = 'Dodaj projekt';
+            break;
+
+          case 'project_details':
+            dialog.header = 'Dodaj zadanie';
+            break;
+        }
     }
   }
 
@@ -395,7 +418,7 @@ export class DashboardComponent implements OnInit {
   downloadInvoice() {
     this.restApiService.getPdf().subscribe((data) => {
 
-      var downloadURL = window.URL.createObjectURL(data);
+      var downloadURL = window.URL.createObjectURL(new Blob([data], {type: 'application/pdf'}));
       var link = document.createElement('a');
       link.href = downloadURL;
       link.download = "help.pdf";
