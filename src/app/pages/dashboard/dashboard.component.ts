@@ -157,7 +157,7 @@ export class DashboardComponent implements OnInit {
           self.calendarJobs = [];
           data.forEach(x => {
             if (x['startDate'] != null) {
-              self.calendarJobs.append(new CalendarJob(x['jobId'], x['name'], this.splitDate(x['startDate']), this.splitDate(x['endDate'])));
+              self.calendarJobs.push(new CalendarJob(x['jobId'], x['name'], this.splitDate(x['startDate']), this.splitDate(x['endDate'])));
             }
           });
         }, (error, errorAction) => {
@@ -312,8 +312,9 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  customDate(date: string) {
-    var dateSplit = date.split('T');
+  customDate(date: any) {
+    var test = date.getDate();
+    var dateSplit = test.toString().split('T');
     var dateTime = dateSplit[1].substring(5);
     return dateSplit[0] + ' ' + dateTime;
   }
@@ -323,7 +324,7 @@ export class DashboardComponent implements OnInit {
       var req = {
         'name': this.jobForm.value.name,
         'time': this.jobForm.value.time,
-        'date': this.customDate(String(this.jobForm.value.date)),
+        'date': this.customDate(this.jobForm.value.date),
         'type': this.jobForm.value.type ? this.jobForm.value.type : null,
         'problem': {
           'problemId': this.jobForm.value.problemId ? this.jobForm.value.problemId : null
