@@ -408,8 +408,38 @@ public roles: object[] = [
           break;
 
         case 'projects':
-          console.log(this.projectForm.value);
-          console.log(this.gridTest);
+          var req = {};
+          req['name'] = this.projectForm.value.name;
+          req['description'] = this.projectForm.value.description;
+          req['client'] = {
+            "id": 2
+          };
+          if (this.gridTest.currentViewData.length > 0) {
+            var users = [];
+            this.gridTest.currentViewData.forEach(data => {
+              var projectUser = {
+                "projectDetailId": {
+                  "userId": data['userId']
+                },
+                "role": data['role'],
+                "startDate": this.customDate(data['startDate']),
+                "endDate": this.customDate(data['endDate'])
+              };
+              users.push(projectUser);
+            });
+            req['signedUsers'] = users;
+          }
+          this.spinner.show();
+          this.contextProvider.getApiContext().subscribe((apiContext) => {
+            this.commonService.handleIncommingApiData(this.restApiService.project_create(req),
+              this, {}, (data, additions, self) => {
+                this._getData();
+                this.spinner.hide();
+              }, (error, errorAction) => {
+                this.spinner.hide();
+                // empty
+              });
+          });
           break;
 
         case 'project_details':

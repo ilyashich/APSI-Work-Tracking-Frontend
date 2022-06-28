@@ -115,6 +115,10 @@ export class RestApiService {
     return this.do_POST(this.baseUrl + '/task/crate/project/' + projectId, task); 
   }
 
+  project_create(project: any) {
+    return this.do_POST(this.baseUrl + '/project/create', project); 
+  }
+
   job_update(id: string, req: any) {
     return this.do_PUT(this.baseUrl + '/job/update/' + id, req); 
   }
