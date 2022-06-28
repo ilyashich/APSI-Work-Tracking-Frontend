@@ -69,6 +69,15 @@ export class RestApiService {
     }
   }
 
+  getPdf() {
+
+    const httpOptions = {
+      responseType: 'blob' as 'json'
+    };
+  
+    return this.http.get(this.baseUrl + '/invoice/get', httpOptions);
+  }
+
   get_details(id: string, lastProjectId: string, lastTaskId: string) {
     switch (id) {
       case 'project_details':

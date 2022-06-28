@@ -313,10 +313,8 @@ export class DashboardComponent implements OnInit {
   }
 
   customDate(date: any) {
-    var test = date.toDateString();
-    var dateSplit = test.toString().split('T');
-    var dateTime = dateSplit[1].substring(5);
-    return dateSplit[0] + ' ' + dateTime;
+    var test = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay() + ' ' + date.getHours() + ':' + date.getMinutes();
+    return test;
   }
 
   actionBegin(args) {
@@ -391,6 +389,18 @@ export class DashboardComponent implements OnInit {
           this.spinner.hide();
           // empty
         });
+    });
+  }
+
+  downloadInvoice() {
+    this.restApiService.getPdf().subscribe((data) => {
+
+      var downloadURL = window.URL.createObjectURL(data);
+      var link = document.createElement('a');
+      link.href = downloadURL;
+      link.download = "help.pdf";
+      link.click();
+    
     });
   }
 
