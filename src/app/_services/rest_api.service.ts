@@ -112,7 +112,7 @@ export class RestApiService {
   }
 
   task_create(task: any, projectId: string) {
-    return this.do_POST(this.baseUrl + '/task/crate/project/' + projectId, task); 
+    return this.do_POST(this.baseUrl + '/task/create/project/' + projectId, task); 
   }
 
   project_create(project: any) {
