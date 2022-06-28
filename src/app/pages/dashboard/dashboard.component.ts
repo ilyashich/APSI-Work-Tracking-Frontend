@@ -154,11 +154,11 @@ export class DashboardComponent implements OnInit {
       this.commonService.handleIncommingApiData(this.restApiService.get_data('calendar'),
         this, {}, (data, additions, self) => {
           self.calendarJobs = [];
-          for (var x in data) {
+          data.forEach(x => {
             if (x['startDate'] != null) {
               self.calendarJobs.append(new CalendarJob(x['jobId'], x['name'], this.splitDate(x['startDate']), this.splitDate(x['endDate'])));
             }
-          }
+          });
         }, (error, errorAction) => {
           // empty
         });
@@ -317,7 +317,7 @@ export class DashboardComponent implements OnInit {
         'name': this.jobForm.value.name,
         'description': this.jobForm.value.description,
         'time': this.jobForm.value.time,
-        'date': this.customDate(this.jobForm.value.date),
+        'date': this.customDate(String(this.jobForm.value.date)),
         'type': this.jobForm.value.type,
         'problem': {
           'problemId': this.jobForm.value.problemId ? this.jobForm.value.problemId : null

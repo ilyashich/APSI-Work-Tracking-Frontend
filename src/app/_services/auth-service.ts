@@ -50,7 +50,7 @@ export class AuthService {
             this.authHeader = 'Basic ' + btoa(login + ':' + password);
             // get token
             this.setToken('abcdefghijklmnopqrstuvwxyz');
-            this.userData = new User(personResponse['id'], personResponse['username'], personResponse['name'], personResponse['surname'], personResponse['role']);
+            this.userData = new User(personResponse['id'], personResponse['username'], personResponse['name'], personResponse['surname'], personResponse['role'], personResponse['rate']);
             resolve(personResponse['name']);
           });
         } else {
