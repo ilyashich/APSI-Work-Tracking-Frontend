@@ -160,11 +160,11 @@ export class DashboardComponent implements OnInit {
               self.calendarJobs.push(new CalendarJob(x['jobId'], x['name'], this.splitDate(x['startDate']), this.splitDate(x['endDate'])));
             }
           });
+          self.eventSettings = { dataSource: self.calendarJobs };
         }, (error, errorAction) => {
           // empty
         });
     });
-    this.eventSettings = { dataSource: this.calendarJobs };
   }
 
   splitDate(date: string) {
@@ -313,7 +313,7 @@ export class DashboardComponent implements OnInit {
   }
 
   customDate(date: any) {
-    var test = date.getDate();
+    var test = date.toDateString();
     var dateSplit = test.toString().split('T');
     var dateTime = dateSplit[1].substring(5);
     return dateSplit[0] + ' ' + dateTime;
