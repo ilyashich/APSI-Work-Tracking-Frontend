@@ -36,7 +36,7 @@ export class AuthService {
     this.router.navigate(['login']);
   }
 
-  login({ login, password }: any): Promise<any> {
+  /*login({ login, password }: any): Promise<any> {
     const headers = new HttpHeaders({
       Authorization: 'Basic ' + btoa(login + ':' + password)
     });
@@ -60,9 +60,9 @@ export class AuthService {
         }
       });
     });
-  }
+  }*/
 
-  /*login({ login, password }: any): Promise<any> {
+  login({ login, password }: any): Promise<any> {
     const headers = new HttpHeaders({
       Authorization : 'Basic ' + btoa(login + ':' + password)
     });
@@ -74,7 +74,7 @@ export class AuthService {
         this.authHeader = 'Basic ' + btoa(login + ':' + password);
         // get token
         this.setToken('abcdefghijklmnopqrstuvwxyz');
-        this.userData = new User(1, "test", "test", "test", "EMPLOYEE");
+        this.userData = new User(1, "test", "test", "test", "ADMIN", 7.0);
         resolve('Test');
       } else {
         console.log('this.authenticated = false')
@@ -82,5 +82,5 @@ export class AuthService {
         reject(new Error('Failed to login'));
       }
     });
-  }*/
+  }
 }

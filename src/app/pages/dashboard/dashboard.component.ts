@@ -86,6 +86,8 @@ export class DashboardComponent implements OnInit {
   public tasks: Task[];
   public calendarJobs: CalendarJob[];
   public userParams: IEditCell;
+  public roleParams: IEditCell;
+  public dpParams: IEditCell;
   //------------------------------------------------
   requestForm = new FormGroup({
     reason: new FormControl('', Validators.required),
@@ -96,6 +98,11 @@ export class DashboardComponent implements OnInit {
     { typeName: '', typeValue: null },
     { typeName: 'Dokument', typeValue: 'DOCUMENT' },
     { typeName: 'Problem', typeValue: 'PROBLEM' }
+];
+
+public roles: object[] = [
+  { typeName: 'Pracownik', typeValue: 'EMPLOYEE' },
+  { typeName: 'Kierownik', typeValue: 'MANAGER' }
 ];
 
   constructor(
@@ -141,6 +148,15 @@ export class DashboardComponent implements OnInit {
           actionComplete: () => false,
       }
     };
+    this.roleParams = {
+      params:   {
+        dataSource: new DataManager(this.roles),
+        fields: { text: 'typeName', value: 'typeValue' },
+        query: new Query(),
+        actionComplete: () => false,
+      }
+    };
+    this.dpParams = { params: {value: new Date() } };
     this.contextProvider.getApiContext().subscribe((apiContext) => {
       this.commonService.handleIncommingApiData(this.restApiService.get_data('problems'),
         this, {}, (data, additions, self) => {
@@ -413,6 +429,8 @@ export class DashboardComponent implements OnInit {
             break;
 
           case 'projects':
+            dialog.height = 800;
+            dialog.width = 1200;
             dialog.header = 'Dodaj projekt';
             break;
 
