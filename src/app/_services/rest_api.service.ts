@@ -70,7 +70,7 @@ export class RestApiService {
   }
 
   getPdf() {
-    return this.do_GET(this.baseUrl + '/invoice/get');
+    return this.do_GET2(this.baseUrl + '/invoice/get');
   }
 
   get_details(id: string, lastProjectId: string, lastTaskId: string) {
@@ -121,6 +121,30 @@ export class RestApiService {
     });
     
     return this.http.get<any>(url, {headers: headers}).pipe(
+        timeout(this.requestTimeout),
+        // ================
+        flatMap(response => of({ item: response, error: null })),
+        // ================
+        catchError(error => {
+            if (error && error.error && error.error.error === 'invalid_token') {
+            localStorage.clear();
+            this.router.navigate(['auth/login']);
+            }
+            // ----------
+            return of({ item: null, error: error });
+        }),
+        );
+    }
+
+  private do_GET2(url: string): Observable<any> {
+    const httpOptions = {
+      responseType: 'blob' as 'json',
+      headers: new HttpHeaders({
+        Authorization : this.authService.getAuthHeader
+      })
+    };
+    
+    return this.http.get<any>(url, httpOptions).pipe(
         timeout(this.requestTimeout),
         // ================
         flatMap(response => of({ item: response, error: null })),

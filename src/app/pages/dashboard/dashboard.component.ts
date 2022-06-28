@@ -313,7 +313,8 @@ export class DashboardComponent implements OnInit {
   }
 
   customDate(date: any) {
-    var test = date.getFullYear() + '-' + date.getMonth()+1 + '-' + date.getDate() + ' 00:00';
+    var month = Number(date.getMonth());
+    var test = date.getFullYear() + '-' + month+1 + '-' + date.getDate() + ' 00:00';
     return test;
   }
 

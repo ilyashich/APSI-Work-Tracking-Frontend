@@ -39,7 +39,7 @@ export class PagesComponent implements OnInit {
             },
             {
               name: 'Kalendarz', 
-              icon: 'list-task',
+              icon: 'calendar2-date-fill',
               url: '/pages/dashboard',
               id: 'calendar'
             }
