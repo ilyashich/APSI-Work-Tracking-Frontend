@@ -38,6 +38,9 @@ export class RestApiService {
           return this.do_GET(this.baseUrl + '/person/' + this.authService.userData.username + '/projects');
         }
 
+      case 'projects_manager':
+        return this.do_GET(this.baseUrl + '/person/' + this.authService.userData.username + '/projects_manager');
+
       case 'jobs':
         if (this.authService.userData.role == 'ADMIN') {
           return this.do_GET(this.baseUrl + '/job/all_to_accept');
@@ -54,6 +57,9 @@ export class RestApiService {
 
       case 'tasks':
         return this.do_GET(this.baseUrl + '/user/' + this.authService.userData.username + '/tasks');
+
+      case 'project_tasks':
+        return this.do_GET(this.baseUrl + '/task/projects/user/' + this.authService.userData.username );
 
       case 'calendar':
         return this.do_GET(this.baseUrl + '/user/' + this.authService.userData.username + '/calendar/jobs');

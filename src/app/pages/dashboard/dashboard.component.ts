@@ -48,6 +48,7 @@ export class DashboardComponent implements OnInit {
   public intl: Internationalization = new Internationalization(); 
   public dateFormatter: Function = this.intl.getDateFormat({ type: 'datetime', format: "dd/MM/yyyy HH:mm"}); 
   public data: any[];
+  public projectManager: any[];
   public selectedData: any;
   public editSettings: EditSettingsModel;
   public toolbar: ToolbarItems[];
@@ -142,7 +143,7 @@ export class DashboardComponent implements OnInit {
         });
     });
     this.contextProvider.getApiContext().subscribe((apiContext) => {
-      this.commonService.handleIncommingApiData(this.restApiService.get_data('tasks'),
+      this.commonService.handleIncommingApiData(this.restApiService.get_data('project_tasks'),
         this, {}, (data, additions, self) => {
           self.tasks = data;
         }, (error, errorAction) => {
@@ -152,12 +153,27 @@ export class DashboardComponent implements OnInit {
     this.contextProvider.getApiContext().subscribe((apiContext) => {
       this.commonService.handleIncommingApiData(this.restApiService.get_data('calendar'),
         this, {}, (data, additions, self) => {
-          self.calendarJobs = data;
+          self.calendarJobs = [];
+          for (var x in data) {
+            if (x['startDate'] != null) {
+              self.calendarJobs.append(new CalendarJob(x['jobId'], x['name'], this.splitDate(x['startDate']), this.splitDate(x['endDate'])));
+            }
+          }
         }, (error, errorAction) => {
           // empty
         });
     });
     this.eventSettings = { dataSource: this.calendarJobs };
+  }
+
+  splitDate(date: string) {
+    var res = [];
+    res.push(Number(date.split('-')[0]));
+    res.push(Number(date.split('-')[1]));
+    res.push(Number(date.split('-')[2].split(' ')[0]));
+    res.push(Number(date.split(' ')[1].split(':')[0]));
+    res.push(Number(date.split(' ')[1].split(':')[1]));
+    return res;
   }
 
   _getData() {
@@ -185,16 +201,37 @@ export class DashboardComponent implements OnInit {
       });
     } else {
       this.showDetails = false;
-      this.contextProvider.getApiContext().subscribe((apiContext) => {
-        this.commonService.handleIncommingApiData(this.restApiService.get_data(this.id),
-          this, {}, (data, additions, self) => {
-            self.data = data;
-            this.spinner.hide();
-          }, (error, errorAction) => {
-            this.spinner.hide();
-            // empty
-          });
-      });
+      if (this.userRole == 'USER' && this.id == 'projects') {
+        this.contextProvider.getApiContext().subscribe((apiContext) => {
+          this.commonService.handleIncommingApiData(this.restApiService.get_data('projects'),
+            this, {}, (data, additions, self) => {
+              self.data = data;
+            }, (error, errorAction) => {
+              // empty
+            });
+        });
+        this.contextProvider.getApiContext().subscribe((apiContext) => {
+          this.commonService.handleIncommingApiData(this.restApiService.get_data('projects_manager'),
+            this, {}, (data, additions, self) => {
+              self.projectManager = data;
+              this.spinner.hide();
+            }, (error, errorAction) => {
+              this.spinner.hide();
+              // empty
+            });
+        });
+      } else {
+        this.contextProvider.getApiContext().subscribe((apiContext) => {
+          this.commonService.handleIncommingApiData(this.restApiService.get_data(this.id),
+            this, {}, (data, additions, self) => {
+              self.data = data;
+              this.spinner.hide();
+            }, (error, errorAction) => {
+              this.spinner.hide();
+              // empty
+            });
+        });
+      }
     }
   }
 
@@ -268,13 +305,19 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  customDate(date: string) {
+    var dateSplit = date.split('T');
+    var dateTime = dateSplit[1].substring(5);
+    return dateSplit[0] + ' ' + dateTime;
+  }
+
   actionBegin(args) {
     if ((args.requestType === 'save')) {
       var req = {
         'name': this.jobForm.value.name,
         'description': this.jobForm.value.description,
         'time': this.jobForm.value.time,
-        'date': this.jobForm.value.date,
+        'date': this.customDate(this.jobForm.value.date),
         'type': this.jobForm.value.type,
         'problem': {
           'problemId': this.jobForm.value.problemId ? this.jobForm.value.problemId : null

@@ -263,6 +263,24 @@
                     </ejs-grid>
                 </div>
             </div>
+            <div *ngIf="projectManager != null" class="card-content">
+                <div class="e-card-header">
+                    <div class="e-card-header-caption">
+                        <div class="e-card-title">Kierowane projekty</div>
+                    </div>
+                </div>
+                <div class="e-card-content" id="content">
+                    <ejs-grid #grid [dataSource]='projectManager' [allowPaging]="true" [allowSorting]="true"
+                        [allowFiltering]="true" [filterSettings]='filterOptions' [pageSettings]='pageSettings'
+                        (actionComplete)='actionComplete($event)' (recordDoubleClick)="recordClick($event)">
+                        <e-columns>
+                            <e-column field='projectId' headerText='ID' textAlign='Left' width=60></e-column>
+                            <e-column field='name' headerText='Nazwa' textAlign='Left' width=100></e-column>
+                            <e-column field='description' headerText='Opis' textAlign='Left' width=200></e-column>
+                        </e-columns>
+                    </ejs-grid>
+                </div>
+            </div>
         </ng-container>
         <ng-container *ngSwitchCase="'tasks'">
             <div class="card-content">
