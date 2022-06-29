@@ -74,7 +74,7 @@ export class AuthService {
         this.authHeader = 'Basic ' + btoa(login + ':' + password);
         // get token
         this.setToken('abcdefghijklmnopqrstuvwxyz');
-        this.userData = new User(1, "test", "test", "test", "EMPLOYEE");
+        this.userData = new User(1, "test", "test", "test", "ADMIN", 7.0);
         resolve('Test');
       } else {
         console.log('this.authenticated = false')

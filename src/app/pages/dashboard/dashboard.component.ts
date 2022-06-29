@@ -52,11 +52,14 @@ export class DashboardComponent implements OnInit {
   public selectedData: any;
   public editSettings: EditSettingsModel;
   public toolbar: ToolbarItems[];
+  public editSettings2: EditSettingsModel;
+  public toolbar2: ToolbarItems[];
   public dateParams: IEditCell;
   public timeParams: IEditCell;
   public typeParams: IEditCell;
   //------------------------------------------------
   users: User[] = [];
+  clients: User[] = [];
   apiContextsData: {};
   page: number = 0;
   selectedContext: string = 'ALL';
@@ -72,8 +75,11 @@ export class DashboardComponent implements OnInit {
   //------------------------------------------------
   public commands: CommandModel[];
   @ViewChild('grid') public grid: GridComponent;
+  @ViewChild('gridTest') public gridTest: GridComponent;
   @ViewChild('ejDialog') ejDialog: DialogComponent;
   @ViewChild('jobForm') jobForm: FormGroup;
+  @ViewChild('projectForm') projectForm: FormGroup;
+  @ViewChild('taskForm') taskForm: FormGroup;
   public dateValue: Date = new Date();
   public currentYear: number = this.dateValue.getFullYear();
   public currentMonth: number = this.dateValue.getMonth();
@@ -82,6 +88,9 @@ export class DashboardComponent implements OnInit {
   public problems: Problem[];
   public tasks: Task[];
   public calendarJobs: CalendarJob[];
+  public userParams: IEditCell;
+  public roleParams: IEditCell;
+  public dpParams: IEditCell;
   //------------------------------------------------
   requestForm = new FormGroup({
     reason: new FormControl('', Validators.required),
@@ -92,6 +101,11 @@ export class DashboardComponent implements OnInit {
     { typeName: '', typeValue: null },
     { typeName: 'Dokument', typeValue: 'DOCUMENT' },
     { typeName: 'Problem', typeValue: 'PROBLEM' }
+];
+
+public roles: object[] = [
+  { typeName: 'Pracownik', typeValue: 'EMPLOYEE' },
+  { typeName: 'Kierownik', typeValue: 'MANAGER' }
 ];
 
   constructor(
@@ -125,6 +139,8 @@ export class DashboardComponent implements OnInit {
     };
     this.editSettings = { allowEditing: false, allowAdding: true, allowDeleting: false, mode: 'Dialog' };
     this.toolbar = ['Add'];
+    this.editSettings2 = { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Normal' };
+    this.toolbar2 = ['Add', 'Edit', 'Delete', 'Update', 'Cancel'];
     this.timeParams = { params: { decimals: 1, value: 1 } };
     this.dateParams = { params: {value: new Date() } };
     this.typeParams = {
@@ -135,10 +151,49 @@ export class DashboardComponent implements OnInit {
           actionComplete: () => false,
       }
     };
+    this.roleParams = {
+      params:   {
+        dataSource: new DataManager(this.roles),
+        fields: { text: 'typeName', value: 'typeValue' },
+        query: new Query(),
+        actionComplete: () => false,
+      }
+    };
+    this.dpParams = { params: {value: new Date() } };
     this.contextProvider.getApiContext().subscribe((apiContext) => {
       this.commonService.handleIncommingApiData(this.restApiService.get_data('problems'),
         this, {}, (data, additions, self) => {
           self.problems = data;
+        }, (error, errorAction) => {
+          // empty
+        });
+    });
+    this.contextProvider.getApiContext().subscribe((apiContext) => {
+      this.commonService.handleIncommingApiData(this.restApiService.get_data('employees'),
+        this, {}, (data, additions, self) => {
+          self.users = [];
+          data.forEach(personResponse => {
+            self.users.push(new User(personResponse['id'], personResponse['username'], personResponse['name'] + ' ' + personResponse['surname'], personResponse['surname'], personResponse['role'], personResponse['rate']));
+          });
+          self.userParams = {
+            params:   {
+                dataSource: self.users,
+                fields: {text:'name',value:'id'},
+                query: new Query(),
+                actionComplete: () => false
+                }
+            }
+        }, (error, errorAction) => {
+          // empty
+        });
+    });
+    this.contextProvider.getApiContext().subscribe((apiContext) => {
+      this.commonService.handleIncommingApiData(this.restApiService.get_data('clients'),
+        this, {}, (data, additions, self) => {
+          self.clients = [];
+          data.forEach(personResponse => {
+            self.clients.push(new User(personResponse['id'], personResponse['username'], personResponse['name'] + ' ' + personResponse['surname'], personResponse['surname'], personResponse['role'], personResponse['rate']));
+          });
         }, (error, errorAction) => {
           // empty
         });
@@ -157,7 +212,7 @@ export class DashboardComponent implements OnInit {
           self.calendarJobs = [];
           data.forEach(x => {
             if (x['startDate'] != null) {
-              self.calendarJobs.push(new CalendarJob(x['jobId'], x['name'], this.splitDate(x['startDate']), this.splitDate(x['endDate'])));
+              self.calendarJobs.push(new CalendarJob(x['jobId'], x['name'], x['time'], this.splitDate(x['startDate']), this.splitDate(x['endDate'])));
             }
           });
           self.eventSettings = { dataSource: self.calendarJobs };
@@ -225,7 +280,17 @@ export class DashboardComponent implements OnInit {
         this.contextProvider.getApiContext().subscribe((apiContext) => {
           this.commonService.handleIncommingApiData(this.restApiService.get_data(this.id),
             this, {}, (data, additions, self) => {
-              self.data = data;
+              if (this.id == 'calendar') {
+                self.calendarJobs = [];
+                data.forEach(x => {
+                  if (x['startDate'] != null) {
+                    self.calendarJobs.push(new CalendarJob(x['jobId'], x['name'], x['time'], this.splitDate(x['startDate']), this.splitDate(x['endDate'])));
+                  }
+                });
+                self.eventSettings = { dataSource: self.calendarJobs };
+              } else {
+                self.data = data;
+              }
               this.spinner.hide();
             }, (error, errorAction) => {
               this.spinner.hide();
@@ -313,39 +378,104 @@ export class DashboardComponent implements OnInit {
   }
 
   customDate(date: any) {
-    var test = date.getFullYear() + '-' + date.getMonth()+1 + '-' + date.getDate() + ' 00:00';
+    var month = Number(date.getMonth());
+    month = month+1;
+    var test = date.getFullYear() + '-' + month + '-' + date.getDate() + ' 00:00';
     return test;
   }
 
   actionBegin(args) {
     if ((args.requestType === 'save')) {
-      var req = {
-        'name': this.jobForm.value.name,
-        'time': this.jobForm.value.time,
-        'date': this.customDate(this.jobForm.value.date),
-        'type': this.jobForm.value.type ? this.jobForm.value.type : null,
-        'problem': {
-          'problemId': this.jobForm.value.problemId ? this.jobForm.value.problemId : null
-        },
-        'documentUrl': this.jobForm.value.documentUrl ? this.jobForm.value.documentUrl : null,
-        'user': {
-          'id': this.auth.userData.id
-        },
-        'task': {
-          'taskId': this.jobForm.value.task,
-        }
-      };
-      this.spinner.show();
-      this.contextProvider.getApiContext().subscribe((apiContext) => {
-        this.commonService.handleIncommingApiData(this.restApiService.job_create(req),
-          this, {}, (data, additions, self) => {
-            this._getData();
-            this.spinner.hide();
-          }, (error, errorAction) => {
-            this.spinner.hide();
-            // empty
+      switch (this.id) {
+        case 'jobs':
+          var req = {};
+          req['name'] = this.jobForm.value.name;
+          req['time'] = this.jobForm.value.time;
+          req['date'] = this.customDate(this.jobForm.value.date);
+          if (this.jobForm.value.type != null) {
+            req['type'] = this.jobForm.value.type;
+            if (this.jobForm.value.problemId != null) {
+              req['problem'] = {
+                'problemId': this.jobForm.value.problemId
+              };
+            }
+            if (this.jobForm.value.documentUrl != null) {
+              req['documentUrl'] = this.jobForm.value.documentUrl;
+            }
+          }
+          req['user'] = {
+            'id': this.auth.userData.id
+          };
+          req['task'] = {
+            'taskId': this.jobForm.value.task
+          };
+          this.spinner.show();
+          this.contextProvider.getApiContext().subscribe((apiContext) => {
+            this.commonService.handleIncommingApiData(this.restApiService.job_create(req),
+              this, {}, (data, additions, self) => {
+                this._getData();
+                this.spinner.hide();
+              }, (error, errorAction) => {
+                this.spinner.hide();
+                // empty
+              });
           });
-      });
+          break;
+
+        case 'projects':
+          var req = {};
+          req['name'] = this.projectForm.value.name;
+          req['description'] = this.projectForm.value.description;
+          req['client'] = {
+            "id": this.projectForm.value.client
+          };
+          if (this.gridTest.currentViewData.length > 0) {
+            var users = [];
+            this.gridTest.currentViewData.forEach(data => {
+              var projectUser = {
+                "projectDetailId": {
+                  "userId": data['userId']
+                },
+                "role": data['role'],
+                "startDate": this.customDate(data['startDate']),
+                "endDate": this.customDate(data['endDate'])
+              };
+              users.push(projectUser);
+            });
+            req['signedUsers'] = users;
+          }
+          this.spinner.show();
+          this.contextProvider.getApiContext().subscribe((apiContext) => {
+            this.commonService.handleIncommingApiData(this.restApiService.project_create(req),
+              this, {}, (data, additions, self) => {
+                this._getData();
+                this.spinner.hide();
+              }, (error, errorAction) => {
+                this.spinner.hide();
+                // empty
+              });
+          });
+          break;
+
+        case 'project_details':
+          console.log(this.taskForm.value);
+          var req = {};
+          req['name'] = this.taskForm.value.name;
+          req['description'] = this.taskForm.value.description;
+          this.spinner.show();
+          this.contextProvider.getApiContext().subscribe((apiContext) => {
+            this.commonService.handleIncommingApiData(this.restApiService.task_create(req, this.lastProjectId),
+              this, {}, (data, additions, self) => {
+                this._getData();
+                this.spinner.hide();
+              }, (error, errorAction) => {
+                this.spinner.hide();
+                // empty
+              });
+          });
+          break;
+      }
+      
     }
   }
 
@@ -356,8 +486,21 @@ export class DashboardComponent implements OnInit {
         dialog.height = 600;
         dialog.width = 400;
         // change the header of the dialog
-        dialog.header = 'Dodaj czynność';
-        console.log('sdsdsw')
+        switch (this.id) {
+          case 'jobs':
+            dialog.header = 'Dodaj czynność';
+            break;
+
+          case 'projects':
+            dialog.height = 800;
+            dialog.width = 1200;
+            dialog.header = 'Dodaj projekt';
+            break;
+
+          case 'project_details':
+            dialog.header = 'Dodaj zadanie';
+            break;
+        }
     }
   }
 
@@ -394,7 +537,7 @@ export class DashboardComponent implements OnInit {
   downloadInvoice() {
     this.restApiService.getPdf().subscribe((data) => {
 
-      var downloadURL = window.URL.createObjectURL(data);
+      var downloadURL = window.URL.createObjectURL(new Blob([data['item']], {type: 'application/pdf'}));
       var link = document.createElement('a');
       link.href = downloadURL;
       link.download = "help.pdf";

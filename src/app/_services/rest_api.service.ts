@@ -30,6 +30,9 @@ export class RestApiService {
       case 'employees':
         return this.do_GET(this.baseUrl + '/persons');
 
+      case 'clients':
+        return this.do_GET(this.baseUrl + '/clients');
+
       case 'projects':
         if (this.authService.userData.role == 'ADMIN') {
           return this.do_GET(this.baseUrl + '/project/all');
@@ -70,7 +73,7 @@ export class RestApiService {
   }
 
   getPdf() {
-    return this.do_GET(this.baseUrl + '/invoice/get');
+    return this.do_GET2(this.baseUrl + '/invoice/get');
   }
 
   get_details(id: string, lastProjectId: string, lastTaskId: string) {
@@ -111,6 +114,14 @@ export class RestApiService {
     return this.do_POST(this.baseUrl + '/job/create', job); 
   }
 
+  task_create(task: any, projectId: string) {
+    return this.do_POST(this.baseUrl + '/task/create/project/' + projectId, task); 
+  }
+
+  project_create(project: any) {
+    return this.do_POST(this.baseUrl + '/project/create', project); 
+  }
+
   job_update(id: string, req: any) {
     return this.do_PUT(this.baseUrl + '/job/update/' + id, req); 
   }
@@ -121,6 +132,30 @@ export class RestApiService {
     });
     
     return this.http.get<any>(url, {headers: headers}).pipe(
+        timeout(this.requestTimeout),
+        // ================
+        flatMap(response => of({ item: response, error: null })),
+        // ================
+        catchError(error => {
+            if (error && error.error && error.error.error === 'invalid_token') {
+            localStorage.clear();
+            this.router.navigate(['auth/login']);
+            }
+            // ----------
+            return of({ item: null, error: error });
+        }),
+        );
+    }
+
+  private do_GET2(url: string): Observable<any> {
+    const httpOptions = {
+      responseType: 'blob' as 'json',
+      headers: new HttpHeaders({
+        Authorization : this.authService.getAuthHeader
+      })
+    };
+    
+    return this.http.get<any>(url, httpOptions).pipe(
         timeout(this.requestTimeout),
         // ================
         flatMap(response => of({ item: response, error: null })),

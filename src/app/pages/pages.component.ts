@@ -39,7 +39,7 @@ export class PagesComponent implements OnInit {
             },
             {
               name: 'Kalendarz', 
-              icon: 'list-task',
+              icon: 'calendar2-date-fill',
               url: '/pages/dashboard',
               id: 'calendar'
             }
@@ -59,12 +59,6 @@ export class PagesComponent implements OnInit {
               icon: 'house-fill',
               url: '/pages/dashboard',
               id: 'projects'
-            },
-            {
-              name: 'Czynności do akceptacji', 
-              icon: 'list-check',
-              url: '/pages/dashboard',
-              id: 'jobs'
             },
             {
               name: 'Repozytorium problemów', 
