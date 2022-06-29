@@ -59,6 +59,7 @@ export class DashboardComponent implements OnInit {
   public typeParams: IEditCell;
   //------------------------------------------------
   users: User[] = [];
+  clients: User[] = [];
   apiContextsData: {};
   page: number = 0;
   selectedContext: string = 'ALL';
@@ -170,7 +171,10 @@ public roles: object[] = [
     this.contextProvider.getApiContext().subscribe((apiContext) => {
       this.commonService.handleIncommingApiData(this.restApiService.get_data('employees'),
         this, {}, (data, additions, self) => {
-          self.users = data;
+          self.users = [];
+          data.forEach(personResponse => {
+            self.users.push(new User(personResponse['id'], personResponse['username'], personResponse['name'] + ' ' + personResponse['surname'], personResponse['surname'], personResponse['role'], personResponse['rate']));
+          });
           self.userParams = {
             params:   {
                 dataSource: self.users,
@@ -179,6 +183,17 @@ public roles: object[] = [
                 actionComplete: () => false
                 }
             }
+        }, (error, errorAction) => {
+          // empty
+        });
+    });
+    this.contextProvider.getApiContext().subscribe((apiContext) => {
+      this.commonService.handleIncommingApiData(this.restApiService.get_data('clients'),
+        this, {}, (data, additions, self) => {
+          self.clients = [];
+          data.forEach(personResponse => {
+            self.clients.push(new User(personResponse['id'], personResponse['username'], personResponse['name'] + ' ' + personResponse['surname'], personResponse['surname'], personResponse['role'], personResponse['rate']));
+          });
         }, (error, errorAction) => {
           // empty
         });

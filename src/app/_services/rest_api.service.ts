@@ -30,6 +30,9 @@ export class RestApiService {
       case 'employees':
         return this.do_GET(this.baseUrl + '/persons');
 
+      case 'clients':
+        return this.do_GET(this.baseUrl + '/clients');
+
       case 'projects':
         if (this.authService.userData.role == 'ADMIN') {
           return this.do_GET(this.baseUrl + '/project/all');

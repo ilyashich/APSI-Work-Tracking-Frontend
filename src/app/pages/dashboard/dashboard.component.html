@@ -365,6 +365,13 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="e-float-input e-control-wrapper">
+                                                    <ejs-dropdownlist id="client" name="client" [(ngModel)]="data.client" [dataSource]='clients' [fields]="{text: 'name', value: 'id' }" placeholder="Klient" popupHeight='300px' floatLabelType='Auto'></ejs-dropdownlist>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <ejs-grid #gridTest [allowPaging]="true" [allowSorting]="true"
                                             [allowFiltering]="true" [filterSettings]='filterOptions' [pageSettings]='pageSettings'
                                             (actionComplete)='actionComplete($event)' [editSettings]='editSettings2' [toolbar]='toolbar2'>
