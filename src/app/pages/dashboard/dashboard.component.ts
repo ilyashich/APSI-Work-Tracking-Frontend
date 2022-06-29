@@ -417,7 +417,6 @@ public roles: object[] = [
                 this.spinner.hide();
               }, (error, errorAction) => {
                 this.spinner.hide();
-                // empty
               });
           });
           break;
