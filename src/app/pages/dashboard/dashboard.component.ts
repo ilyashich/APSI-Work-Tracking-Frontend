@@ -427,7 +427,7 @@ public roles: object[] = [
           req['name'] = this.projectForm.value.name;
           req['description'] = this.projectForm.value.description;
           req['client'] = {
-            "id": 2
+            "id": this.projectForm.value.client
           };
           if (this.gridTest.currentViewData.length > 0) {
             var users = [];
